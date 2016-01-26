@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="sponsor_sharks">
+        <item>ADVANCED ROOFING</item>
+        <item>AFTCO</item>
+        <item>BREGARDO PRIMARY</item>
+        <item>CHARLOTTE</item>
+        <item>DIVERS DIRECT</item>
+        <item>EBENEZER PRIMARY</item>
+        <item>ESELYN CENTER</item>
+        <item>GRYCON</item>
+        <item>HELLS BAY</item>
+        <item>PALMETTO MOON</item>
+    </string-array>
+</resources>
