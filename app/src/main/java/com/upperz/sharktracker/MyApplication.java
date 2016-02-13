@@ -40,17 +40,26 @@ public class MyApplication extends Application
     {
         super.onCreate();
 
+        /*Initiate Joda Time*/
         JodaTimeAndroid.init(this);
+
+        /*Enable the Parse Local DataStore*/
         Parse.enableLocalDatastore(this);
+
+        /*Initialize Parse for use*/
         Parse.initialize(this, "IwtHq5dLlt0Wasp3tQ78g9sSeBFItdOQomd5BGb5",
                 "cdX1CgLdRYRRPBBUX6jYMFscjaq6Myxc1fn47Z0l");
 
+        /*Enter Parse sign up method*/
         parseSignUp();
+
+        /*Create data map to be use for shark sponsors*/
         createSharkSponsorMap();
     }
 
     private void parseSignUp()
     {
+        /*Retrieve deviceId for logging purposes*/
         String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
