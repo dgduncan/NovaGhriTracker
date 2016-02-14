@@ -1,18 +1,12 @@
 package com.upperz.sharktracker;
 
 import android.app.Application;
-import android.provider.Settings;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import net.danlew.android.joda.JodaTimeAndroid;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +16,7 @@ import java.util.Map;
 
 public class MyApplication extends Application
 {
+
     public final static HashMap<String, Object> params = new HashMap<>();
     public final static HashMap<String, Object> sharkTrackParams = new HashMap<>();
     public static List<ParseObject> sharks = new ArrayList<>();
@@ -32,8 +27,7 @@ public class MyApplication extends Application
     public static Marker mCurrentMarkerSelected;
     public static ParseObject mCurrentObjectParseObject;
     public static String mCurrentSharkSelected;
-
-    private String TAG = "MyApplication";
+    
 
 
     public void onCreate()
@@ -50,31 +44,8 @@ public class MyApplication extends Application
         Parse.initialize(this, "IwtHq5dLlt0Wasp3tQ78g9sSeBFItdOQomd5BGb5",
                 "cdX1CgLdRYRRPBBUX6jYMFscjaq6Myxc1fn47Z0l");
 
-        /*Enter Parse sign up method*/
-        parseSignUp();
-
         /*Create data map to be use for shark sponsors*/
         createSharkSponsorMap();
-    }
-
-    private void parseSignUp()
-    {
-        /*Retrieve deviceId for logging purposes*/
-        String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-        ParseUser user = new ParseUser();
-        user.setUsername(deviceId);
-        user.setPassword("password");
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null)
-                    Log.i(TAG, "User created");
-                else
-                    Log.d(TAG, e.toString());
-            }
-        });
-
     }
 
     private void createSharkSponsorMap()
@@ -131,28 +102,4 @@ public class MyApplication extends Application
         }
 
     }
-
-    /*private void parseLogIn() {
-
-        deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-
-        ParseUser.logInInBackground(deviceId, "password", new LogInCallback() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if (e == null) {
-                    Log.i(TAG, "User Logged In Correctly");
-                } else {
-                    Log.i(TAG, "Log In Failed");
-                    if(e.getCode() == 101)
-                        parseSignUp();
-                }
-            }
-        });
-
-
-
-
-    }*/
 }

@@ -22,13 +22,13 @@
             android:value="AIzaSyBiMXWVnnTOzIxw27IcEJmT_vF0LAxx-0Y" />
 
         <activity
-            android:name=".MainTabbedActivity"
+            android:name=".Activities.MainTabbedActivity"
             android:label="@string/title_activity_main_tabbed"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
         <activity
             android:name=".LearnMoreActivity"
             android:label="@string/title_activity_learn_more"
-            android:parentActivityName=".MainTabbedActivity">
+            android:parentActivityName=".Activities.MainTabbedActivity">
         </activity>
     </application>
 

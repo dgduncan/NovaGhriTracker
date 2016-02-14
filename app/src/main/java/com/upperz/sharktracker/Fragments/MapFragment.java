@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Fragments;
 
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +31,8 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.upperz.sharktracker.MyApplication;
+import com.upperz.sharktracker.R;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;

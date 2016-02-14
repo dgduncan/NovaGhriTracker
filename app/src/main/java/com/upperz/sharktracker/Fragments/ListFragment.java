@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Fragments;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.upperz.sharktracker.MyApplication;
+import com.upperz.sharktracker.R;
+import com.upperz.sharktracker.RecyclerItemClickListener;
+import com.upperz.sharktracker.SharkAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;

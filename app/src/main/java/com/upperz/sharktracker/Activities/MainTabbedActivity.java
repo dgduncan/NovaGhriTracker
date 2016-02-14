@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Activities;
 
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.TabLayout;
@@ -20,6 +20,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
+import com.upperz.sharktracker.Fragments.ListFragment;
+import com.upperz.sharktracker.Fragments.MapFragment;
+import com.upperz.sharktracker.MyApplication;
+import com.upperz.sharktracker.R;
+import com.upperz.sharktracker.Fragments.SharkFragment;
+import com.upperz.sharktracker.Fragments.SponsorFragment;
 
 import me.drakeet.materialdialog.MaterialDialog;
 

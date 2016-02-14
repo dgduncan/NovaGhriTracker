@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Fragments;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.upperz.sharktracker.MyApplication;
+import com.upperz.sharktracker.R;
 
 import java.util.List;
 

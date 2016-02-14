@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.upperz.sharktracker.R;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.upperz.sharktracker;
+package com.upperz.sharktracker.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.upperz.sharktracker.MyApplication;
 
 import java.util.ArrayList;
 
