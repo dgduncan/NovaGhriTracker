@@ -1,5 +1,6 @@
 package com.upperz.sharktracker.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,6 +33,7 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.upperz.sharktracker.Activities.SharkActivity;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
@@ -46,7 +49,7 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter {
 
     public DateTimeFormatter dateTimeFormat;
     public DateTime dateTime;
@@ -90,16 +93,11 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
 
-        map = mapView.getMap();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.48, -68.486), 2.0f));
-        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        map.setOnMarkerClickListener(this);
-        map.setOnMapClickListener(this);
-        map.setInfoWindowAdapter(this);
-        map.setOnInfoWindowClickListener(this);
 
-        loadCurrentLocations();
+
+
 
         return v;
     }
@@ -112,83 +110,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         }
     }
 
-    @Override
-    public View getInfoWindow(Marker marker) {
-        return null;
-    }
 
-    @Override
-    public View getInfoContents(Marker marker) {
-        View v = View.inflate(getContext(), R.layout.custom_info_window, null);
-        v.findViewById(R.id.sponsor_layout).setVisibility(View.GONE);
-
-        nameView = (TextView) v.findViewById(R.id.name);
-        latitudeView = (TextView) v.findViewById(R.id.date_info_window);
-        longitudeView = (TextView) v.findViewById(R.id.species_info_window);
-        sponsorView = (TextView) v.findViewById(R.id.sponsor_info_window);
-
-        for (ParseObject aSharkInfo : MyApplication.sharks) {
-
-            if (aSharkInfo.getString("shark").equals(marker.getTitle())) {
-                nameView.setText(aSharkInfo.getString("shark"));
-                latitudeView.setText(aSharkInfo.getString("date"));
-                longitudeView.setText(aSharkInfo.getString("species"));
-
-                if(Arrays.asList(getResources().getStringArray(R.array.sponsor_sharks)).contains(aSharkInfo.getString("shark")))
-                {
-                    v.findViewById(R.id.sponsor_layout).setVisibility(View.VISIBLE);
-                    sponsorView.setText(MyApplication.sharkSponsors.get(aSharkInfo.getString("shark")));
-                }
-            }
-        }
-
-        return v;
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-
-        MyApplication.mCurrentSharkSelected = marker.getTitle();
-
-        for(ParseObject x : MyApplication.sharks)
-        {
-            if(x.getString("shark").equalsIgnoreCase(marker.getTitle()))
-                MyApplication.mCurrentObjectParseObject = x;
-        }
-
-        adjustScreenPosition(1);
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-        zoomOutAndReload();
-        if(snack != null)
-            snack.dismiss();
-
-    }
-
-
-    @Override
-    public boolean onMarkerClick(final Marker marker) {
-
-        MyApplication.mCurrentMarkerSelected = marker;
-
-        if(temporaryStartMarker == null)
-            createSnackBar();
-
-        marker.showInfoWindow();
-
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
-
-        MyApplication.dimensions.clear();
-        MyApplication.dimensions.put("Shark", marker.getTitle());
-        ParseAnalytics.trackEventInBackground("MarkerClick", MyApplication.dimensions);
-
-
-
-        return true;
-    }
 
 
 
@@ -214,8 +136,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         startQuery.setLimit(1);
         startQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scoreList, ParseException e) {
-                if (e == null)
-                {
+                if (e == null) {
                     MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.valueOf(scoreList.get(0).getString("latitude")), Double.valueOf(scoreList.get(0).getString("longitude"))))
                             .title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
                     temporaryStartMarker = map.addMarker(marker);
@@ -515,4 +436,102 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         Log.d(TAG, "onLowMemory Called");
     }
 
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        View v = View.inflate(getContext(), R.layout.custom_info_window, null);
+        v.findViewById(R.id.sponsor_layout).setVisibility(View.GONE);
+
+        nameView = (TextView) v.findViewById(R.id.name);
+        latitudeView = (TextView) v.findViewById(R.id.date_info_window);
+        longitudeView = (TextView) v.findViewById(R.id.species_info_window);
+        sponsorView = (TextView) v.findViewById(R.id.sponsor_info_window);
+
+        for (ParseObject aSharkInfo : MyApplication.sharks) {
+
+            if (aSharkInfo.getString("shark").equals(marker.getTitle())) {
+                nameView.setText(aSharkInfo.getString("shark"));
+                latitudeView.setText(aSharkInfo.getString("date"));
+                longitudeView.setText(aSharkInfo.getString("species"));
+
+                if(Arrays.asList(getResources().getStringArray(R.array.sponsor_sharks)).contains(aSharkInfo.getString("shark")))
+                {
+                    v.findViewById(R.id.sponsor_layout).setVisibility(View.VISIBLE);
+                    sponsorView.setText(MyApplication.sharkSponsors.get(aSharkInfo.getString("shark")));
+                }
+            }
+        }
+
+        return v;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+        Intent intent = new Intent(getActivity(), SharkActivity.class);
+        startActivity(intent);
+
+        /*MyApplication.mCurrentSharkSelected = marker.getTitle();
+
+        for(ParseObject x : MyApplication.sharks)
+        {
+            if(x.getString("shark").equalsIgnoreCase(marker.getTitle()))
+                MyApplication.mCurrentObjectParseObject = x;
+        }
+
+        adjustScreenPosition(1);*/
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+        zoomOutAndReload();
+        if(snack != null)
+            snack.dismiss();
+
+    }
+
+
+
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+
+        MyApplication.mCurrentMarkerSelected = marker;
+
+        if(temporaryStartMarker == null)
+            createSnackBar();
+
+        marker.showInfoWindow();
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
+
+        MyApplication.dimensions.clear();
+        MyApplication.dimensions.put("Shark", marker.getTitle());
+        ParseAnalytics.trackEventInBackground("MarkerClick", MyApplication.dimensions);
+
+
+
+        return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        map = googleMap;
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.48, -68.486), 2.0f));
+        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        map.setOnMarkerClickListener(this);
+        map.setOnMapClickListener(this);
+        map.setInfoWindowAdapter(this);
+        map.setOnInfoWindowClickListener(this);
+
+        loadCurrentLocations();
+
+    }
 }

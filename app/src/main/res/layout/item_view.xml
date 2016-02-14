@@ -3,44 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height">
 
-    <!-- this view reveals when swipe right -->
-    <RelativeLayout
-        android:tag="reveal-right"
-        android:background="#4CAF50"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:tint="@color/ColorIcons"
-            android:src="@drawable/ic_action_checkmark_100_dark" />
-    </RelativeLayout>
-
-
-    <!-- this view reveals when swipe left -->
-    <RelativeLayout
-        android:tag="reveal-left"
-
-        android:background="#FFC107"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:tint="@color/ColorIcons"
-            android:src="@drawable/ic_action_edit_100"/>
-        />
-    </RelativeLayout>
-
-
     <!-- this is the item front view -->
     <RelativeLayout
         android:tag="front"

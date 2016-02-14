@@ -27,7 +27,7 @@ public class MyApplication extends Application
     public static Marker mCurrentMarkerSelected;
     public static ParseObject mCurrentObjectParseObject;
     public static String mCurrentSharkSelected;
-    
+
 
 
     public void onCreate()
@@ -36,9 +36,6 @@ public class MyApplication extends Application
 
         /*Initiate Joda Time*/
         JodaTimeAndroid.init(this);
-
-        /*Enable the Parse Local DataStore*/
-        Parse.enableLocalDatastore(this);
 
         /*Initialize Parse for use*/
         Parse.initialize(this, "IwtHq5dLlt0Wasp3tQ78g9sSeBFItdOQomd5BGb5",
