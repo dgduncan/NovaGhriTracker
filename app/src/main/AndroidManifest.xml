@@ -21,7 +21,9 @@
         <activity
             android:name=".Activities.MainTabbedActivity"
             android:label="@string/title_activity_main_tabbed"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -33,8 +35,11 @@
         </activity>
         <activity
             android:name=".Activities.SharkActivity"
+            android:parentActivityName=".Activities.MainTabbedActivity"
             android:label="@string/title_activity_shark"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

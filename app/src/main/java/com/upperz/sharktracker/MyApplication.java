@@ -2,9 +2,9 @@ package com.upperz.sharktracker;
 
 import android.app.Application;
 
-import com.google.android.gms.maps.model.Marker;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.upperz.sharktracker.Classes.Animal;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -17,14 +17,13 @@ import java.util.Map;
 public class MyApplication extends Application
 {
 
+    public static HashMap<String, Animal> animals = new HashMap<>();
     public final static HashMap<String, Object> params = new HashMap<>();
     public final static HashMap<String, Object> sharkTrackParams = new HashMap<>();
     public static List<ParseObject> sharks = new ArrayList<>();
     public final static Map<String, String> dimensions = new HashMap<>();
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
-    public static Boolean mLoadSharkTrackFlag = false;
-    public static Marker mCurrentMarkerSelected;
     public static ParseObject mCurrentObjectParseObject;
     public static String mCurrentSharkSelected;
 

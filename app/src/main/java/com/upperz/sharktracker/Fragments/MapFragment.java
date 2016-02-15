@@ -2,14 +2,11 @@ package com.upperz.sharktracker.Fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,29 +16,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.upperz.sharktracker.Activities.SharkActivity;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,20 +38,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter {
 
-    public DateTimeFormatter dateTimeFormat;
-    public DateTime dateTime;
-
-
     public List<Marker> markerList = new ArrayList<>();
     public List<Polyline> mPolyLines = new ArrayList<>();
 
 
-    public String TAG = "MapFragment";
     public Snackbar snack;
 
     public FloatingActionButton fab;
     public Marker temporaryStartMarker;
     public Marker temporaryEndMarker;
+    public Marker mCurrentMarkerSelected;
     public MapView mapView;
     public GoogleMap map;
     public TextView latitudeView;
@@ -77,10 +60,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        /*Inflate the fragment view for the map*/
         View v =inflater.inflate(R.layout.fragment_map,container,false);
 
-        createDialog("Loading Map");
-
+        /*Initialize the floating action button*/
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,61 +74,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
         fab.setVisibility(View.INVISIBLE);
 
+        /*Create reference to mapview and begin loading the map*/
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-
-
-
-
+        /*Return the view to be loaded*/
         return v;
     }
-
-    public void loadCurrentLocations()
-    {
-        for (ParseObject x : MyApplication.sharks) {
-            SetMapMarker(x);
-            mDialog.dismissWithAnimation();
-        }
-    }
-
-
-
-
-
-    public void SetMapMarker(ParseObject sharkObject)
-    {
-        if(checkIfRecent(sharkObject))
-        {
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.valueOf(sharkObject.getString("latitude")), Double.valueOf(sharkObject.getString("longitude")))).title(sharkObject.getString("shark")).icon(BitmapDescriptorFactory.fromResource(R.drawable.green_measle));
-            markerList.add(map.addMarker(marker));
-        }
-        else
-        {
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.valueOf(sharkObject.getString("latitude")), Double.valueOf(sharkObject.getString("longitude")))).title(sharkObject.getString("shark")).icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_measle));
-            markerList.add(map.addMarker(marker));
-        }
-    }
-
-    public void setStartMarker(final String name)
-    {
-        ParseQuery<ParseObject> startQuery = ParseQuery.getQuery("Animals");
-        startQuery.whereEqualTo("shark", name);
-        startQuery.whereEqualTo("sequence", "1");
-        startQuery.setLimit(1);
-        startQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> scoreList, ParseException e) {
-                if (e == null) {
-                    MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.valueOf(scoreList.get(0).getString("latitude")), Double.valueOf(scoreList.get(0).getString("longitude"))))
-                            .title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
-                    temporaryStartMarker = map.addMarker(marker);
-
-                }
-            }
-        });
-    }
-
 
     public void createSharkTrack(final String name)
     {
@@ -169,18 +105,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         mLatLngs.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
 
 
-                    if(MyApplication.mCurrentMarkerSelected == null)
-                    {
-                        for(Marker m : markerList)
-                        {
-                            if(m.getTitle().equals(name))
+                    if (mCurrentMarkerSelected == null) {
+                        for (Marker m : markerList) {
+                            if (m.getTitle().equals(name))
                                 m.setVisible(true);
                         }
                     }
 
-
-
-                    setStartMarker(name);
                     mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
                     mDialog.dismiss();
                     MyApplication.sharkTrackParams.clear();
@@ -191,78 +122,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
-
-        /*if(MyApplication.mCurrentMarkerSelected != null) {
-
-
-            MyApplication.sharkTrackParams.put("shark", name);
-
-            ParseCloud.callFunctionInBackground("createSharkTrack", MyApplication.sharkTrackParams, new FunctionCallback<ArrayList<ParseGeoPoint>>() {
-                @Override
-                public void done(ArrayList<ParseGeoPoint> parseObjects, ParseException e) {
-
-                    if (e == null) {
-
-                        ArrayList<LatLng> latLngs = new ArrayList<>();
-
-                        for (ParseGeoPoint geoPoint : parseObjects)
-                            latLngs.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
-
-                        MarkerOptions marker = new MarkerOptions().position(new LatLng(parseObjects.get(0).getLatitude(), parseObjects.get(0).getLongitude()))
-                                .title(MyApplication.mCurrentSharkSelected).icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
-                        temporaryStartMarker = map.addMarker(marker);
-
-                        mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(latLngs)));
-
-                        mDialog.dismiss();
-
-                        MyApplication.sharkTrackParams.clear();
-
-
-                    }
-
-                }
-            });
-        }
-        else
-        {
-
-
-
-            MyApplication.sharkTrackParams.put("shark", name);
-
-            ParseCloud.callFunctionInBackground("createSharkTrack", MyApplication.sharkTrackParams, new FunctionCallback<ArrayList<ParseGeoPoint>>() {
-                @Override
-                public void done(ArrayList<ParseGeoPoint> parseObjects, ParseException e) {
-
-                    if (e == null) {
-
-                        ArrayList<LatLng> latLngs = new ArrayList<>();
-
-                        MarkerOptions marker = new MarkerOptions().position(new LatLng(parseObjects.get(0).getLatitude(), parseObjects.get(0).getLongitude()))
-                                .title(MyApplication.mCurrentSharkSelected).icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
-                        temporaryStartMarker = map.addMarker(marker);
-
-                        marker = new MarkerOptions().position(new LatLng(parseObjects.get(parseObjects.size()-1).getLatitude(), parseObjects.get(parseObjects.size()-1).getLongitude()))
-                                .title(MyApplication.mCurrentSharkSelected).icon(BitmapDescriptorFactory.fromResource(R.drawable.green_measle));
-                        temporaryEndMarker = map.addMarker(marker);
-
-                        for (ParseGeoPoint geoPoint : parseObjects)
-                            latLngs.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
-
-                        mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(latLngs)));
-
-                        mDialog.dismiss();
-
-                        MyApplication.sharkTrackParams.clear();
-
-
-                    }
-
-                }
-            });
-
-        }*/
 
         fab.setVisibility(View.VISIBLE);
 
@@ -277,13 +136,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     {
 
 
-        MyApplication.mCurrentMarkerSelected = null;
+        mCurrentMarkerSelected = null;
+
         if (temporaryEndMarker != null)
             temporaryEndMarker.remove();
         temporaryEndMarker = null;
+
         if(temporaryStartMarker != null)
             temporaryStartMarker.remove();
         temporaryStartMarker = null;
+
         if(snack != null)
             snack.dismiss();
 
@@ -305,14 +167,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void createSnackBar()
     {
 
-        if(MyApplication.mCurrentMarkerSelected != null) {
-            snack = Snackbar.make(getView(), MyApplication.mCurrentMarkerSelected.getTitle() + " Clicked", Snackbar.LENGTH_INDEFINITE);
+        if(mCurrentMarkerSelected != null) {
+            snack = Snackbar.make(getView(), mCurrentMarkerSelected.getTitle() + " Clicked", Snackbar.LENGTH_INDEFINITE);
             snack.setAction("SEE TRACK", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    MyApplication.mCurrentMarkerSelected.hideInfoWindow();
-                    createSharkTrack(MyApplication.mCurrentMarkerSelected.getTitle());
+                    mCurrentMarkerSelected.hideInfoWindow();
+
+                    createSharkTrack(mCurrentMarkerSelected.getTitle());
 
                 }
             });
@@ -337,32 +200,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mDialog.show();
     }
 
-    public boolean checkIfRecent(ParseObject objectToCheckIfRecent) {
-
-        dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
-        dateTime = dateTimeFormat.parseDateTime(objectToCheckIfRecent.getString("date"));
-
-        return Days.daysBetween(dateTime, new LocalDateTime().toDateTime()).getDays() <= 14;
-
-    }
-
-    public void adjustScreenPosition(int screenNumber)
-    {
-
-        ViewPager vp = (ViewPager) getActivity().findViewById(R.id.container);
-        TabLayout tl = (TabLayout) getActivity().findViewById(R.id.tabs);
-        vp.setCurrentItem(screenNumber);
-        tl.setScrollPosition(screenNumber, 0, true);
-
-    }
 
     public void adjustUI(int adjustmentType)
     {
         switch (adjustmentType)
         {
             case 0:
-                if(MyApplication.mCurrentMarkerSelected != null)
-                    MyApplication.mCurrentMarkerSelected.hideInfoWindow();
+                if(mCurrentMarkerSelected != null)
+                    mCurrentMarkerSelected.hideInfoWindow();
                 closeSnackBar();
                 hideNonSelectedMarkers();
 
@@ -374,12 +219,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     public void hideNonSelectedMarkers()
     {
-        Marker mCurrentMarker = MyApplication.mCurrentMarkerSelected;
+        Marker mCurrentMarker = mCurrentMarkerSelected;
 
         if(mCurrentMarker != null) {
             for (Marker m : markerList) {
                 {
-                    if (!(m.equals(MyApplication.mCurrentMarkerSelected)))
+                    if (!(m.equals(mCurrentMarkerSelected)))
                         m.setVisible(false);
                 }
             }
@@ -395,46 +240,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-    @Override
-    public void onCreate(Bundle SavedInstanceState)
-    {
-        super.onCreate(SavedInstanceState);
-    }
 
-
-    @Override
-    public void onResume() {
-        mapView.onResume();
-        super.onResume();
-
-        Log.d(TAG, "onResume Called");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-
-        MyApplication.mCurrentMarkerSelected = null;
-
-        Log.d(TAG, "onPause Called");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-
-        Log.d(TAG, "onDestroy Called");
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-
-        Log.d(TAG, "onLowMemory Called");
-    }
 
     @Override
     public View getInfoWindow(Marker marker) {
@@ -470,68 +276,97 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-
+    public void onInfoWindowClick(Marker marker)
+    {
         Intent intent = new Intent(getActivity(), SharkActivity.class);
+        intent.putExtra("name", marker.getTitle());
+
         startActivity(intent);
 
-        /*MyApplication.mCurrentSharkSelected = marker.getTitle();
-
-        for(ParseObject x : MyApplication.sharks)
-        {
-            if(x.getString("shark").equalsIgnoreCase(marker.getTitle()))
-                MyApplication.mCurrentObjectParseObject = x;
-        }
-
-        adjustScreenPosition(1);*/
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
 
         zoomOutAndReload();
-        if(snack != null)
-            snack.dismiss();
 
     }
 
-
-
-
-    @Override
-    public boolean onMarkerClick(final Marker marker) {
-
-        MyApplication.mCurrentMarkerSelected = marker;
-
-        if(temporaryStartMarker == null)
-            createSnackBar();
-
-        marker.showInfoWindow();
-
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
-
-        MyApplication.dimensions.clear();
-        MyApplication.dimensions.put("Shark", marker.getTitle());
-        ParseAnalytics.trackEventInBackground("MarkerClick", MyApplication.dimensions);
-
-
-
-        return true;
-    }
-
+    /***
+     *
+     * @param googleMap Reference to the Google Map Currently loaded
+     */
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
+        /*Move to map so that googleMap can be accessed from anywhere*/
+
+
+        /*Set the standard listeners and default states for the google map*/
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.48, -68.486), 2.0f));
+        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
+        googleMap.setInfoWindowAdapter(this);
+        googleMap.setOnInfoWindowClickListener(this);
+
         map = googleMap;
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(26.48, -68.486), 2.0f));
-        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        map.setOnMarkerClickListener(this);
-        map.setOnMapClickListener(this);
-        map.setInfoWindowAdapter(this);
-        map.setOnInfoWindowClickListener(this);
+        /*Add all the animals to the map*/
+        for (String animalName : MyApplication.animals.keySet()) {
 
-        loadCurrentLocations();
+            markerList.add(map.addMarker(MyApplication.animals.get(animalName).latestLocation));
 
+        }
+
+    }
+
+    @Override
+    public void onCreate(Bundle SavedInstanceState)
+    {
+        super.onCreate(SavedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory()
+    {
+        super.onLowMemory();
+        mapView.onLowMemory();
+
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        marker.showInfoWindow();
+
+        mCurrentMarkerSelected = marker;
+
+        createSnackBar();
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
+
+        return true;
     }
 }

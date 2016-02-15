@@ -9,17 +9,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.parse.ParseAnalytics;
 import com.upperz.sharktracker.Fragments.ListFragment;
 import com.upperz.sharktracker.Fragments.MapFragment;
-import com.upperz.sharktracker.Fragments.SharkFragment;
 import com.upperz.sharktracker.Fragments.SponsorFragment;
-import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
 import me.drakeet.materialdialog.MaterialDialog;
@@ -27,7 +23,6 @@ import me.drakeet.materialdialog.MaterialDialog;
 public class MainTabbedActivity extends AppCompatActivity {
 
 
-    public SharkFragment sf;
     public MapFragment mf;
 
 
@@ -36,14 +31,11 @@ public class MainTabbedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tabbed);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ParseAnalytics.trackAppOpenedInBackground(getIntent());
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("GHRI Tracking Projects");
         toolbar.setNavigationIcon(R.drawable.rsz_11rsz_1logo);
-        //toolbar.setLogo(R.drawable.ghri_logo);
         setSupportActionBar(toolbar);
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -51,7 +43,7 @@ public class MainTabbedActivity extends AppCompatActivity {
 
         final ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        //mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -62,20 +54,13 @@ public class MainTabbedActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                if (position == 0) {
+                if (position == 0)
+                {
                     mf.createSnackBar();
-                    if(MyApplication.mLoadSharkTrackFlag)
-                    {
-                        MyApplication.mLoadSharkTrackFlag = false;
-                        mf.createSharkTrack(MyApplication.mCurrentSharkSelected);
-                    }
                 }
                 else
                     mf.closeSnackBar();
 
-                if (position == 1) {
-                    sf.update();
-                }
             }
 
             @Override
@@ -136,20 +121,14 @@ public class MainTabbedActivity extends AppCompatActivity {
 
             if(position == 0) // if the position is 0 we are returning the First tab
             {
-                Log.d("MainTabbed", "Here");
                 mf = new MapFragment();
                 return mf;
             }
             if(position == 1)
             {
-                sf = new SharkFragment();
-                return sf;
-            }
-            if(position == 2)
-            {
                 return new ListFragment();
             }
-            if(position == 3)
+            if(position == 2)
             {
                 return new SponsorFragment();
             }
@@ -160,7 +139,7 @@ public class MainTabbedActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
 
         @Override
@@ -169,10 +148,8 @@ public class MainTabbedActivity extends AppCompatActivity {
                 case 0:
                     return "Map";
                 case 1:
-                    return "Detail";
-                case 2:
                     return "Animal List";
-                case 3:
+                case 2:
                     return "Sponsors";
             }
             return null;

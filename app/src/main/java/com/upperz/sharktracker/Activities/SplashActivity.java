@@ -6,16 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.parse.FindCallback;
+import com.google.android.gms.maps.MapsInitializer;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -31,43 +30,30 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getAnimalNames();
+        MapsInitializer.initialize(getApplicationContext());
+
         updateLocally();
-    }
-
-    private void getAnimalNames()
-    {
-        ParseQuery<ParseObject> startQuery = ParseQuery.getQuery("Latestlocations");
-        startQuery.setLimit(200);
-        startQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> scoreList, ParseException e) {
-                if (e == null) {
-                    Log.d(TAG, String.valueOf(scoreList.size()));
-
-                }
-            }
-        });
     }
 
     private void updateLocally()
     {
-        Log.i(TAG, "Attempting to update information locally");
         showDialog("Updating Animal Locations");
 
         ParseCloud.callFunctionInBackground("getLatestLocations", MyApplication.params, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(final ArrayList<ParseObject> p, ParseException e) {
-
                 if (e == null) {
                     MyApplication.sharks.addAll(p);
+
+                    createAnimalReferences(p);
+
 
                     pDialog.dismissWithAnimation();
 
                     Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
+                } else
                     Log.d(TAG, e.toString());
 
             }
@@ -85,5 +71,14 @@ public class SplashActivity extends AppCompatActivity {
         pDialog.setTitleText(dialogTitle);
         pDialog.setCancelable(false);
         pDialog.show();
+    }
+
+    private void createAnimalReferences(ArrayList<ParseObject> latestLocationsOfAnimals)
+    {
+        for(ParseObject newShark : latestLocationsOfAnimals)
+        {
+            MyApplication.animals.put(newShark.getString("shark"), new Animal(newShark));
+        }
+
     }
 }
