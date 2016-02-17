@@ -1,9 +1,11 @@
 package com.upperz.sharktracker.Fragments;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.upperz.sharktracker.Activities.SharkActivity;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 import com.upperz.sharktracker.RecyclerItemClickListener;
@@ -35,6 +38,8 @@ public class ListFragment extends Fragment
     int recenttest1;
     int recenttest2;
 
+    public String trackName;
+
     DateTime dt1;
     DateTime dt2;
     DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
@@ -42,7 +47,7 @@ public class ListFragment extends Fragment
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         SharkAdapter adapter;
         RecyclerView recyclerView;
@@ -63,16 +68,10 @@ public class ListFragment extends Fragment
                     TextView t = (TextView) view.findViewById(R.id.sharkTextView);
                     MyApplication.mCurrentSharkSelected = t.getText().toString();
 
-                    for(ParseObject x : MyApplication.sharks)
-                    {
-                        if(x.getString("shark").equalsIgnoreCase(t.getText().toString()))
-                            MyApplication.mCurrentObjectParseObject = x;
-                    }
+                    Intent intent = new Intent(getActivity(), SharkActivity.class);
+                    intent.putExtra("name", t.getText().toString());
+                    startActivityForResult(intent, 1);
 
-                    ViewPager vp = (ViewPager) getActivity().findViewById(R.id.container);
-                    TabLayout tl = (TabLayout) getActivity().findViewById(R.id.tabs);
-                    vp.setCurrentItem(1);
-                    tl.setScrollPosition(1, 0, true);
 
 
                 } catch (NullPointerException e) {
@@ -91,6 +90,21 @@ public class ListFragment extends Fragment
 
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                trackName = data.getStringExtra("trackName");
+                ViewPager vp = (ViewPager) getActivity().findViewById(R.id.container);
+                TabLayout tl = (TabLayout) getActivity().findViewById(R.id.tabs);
+                vp.setCurrentItem(0);
+                tl.setScrollPosition(0, 0, true);
+            }
+        }
     }
 
     public class CustomComparator implements Comparator<ParseObject> {

@@ -1,5 +1,6 @@
 package com.upperz.sharktracker.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FunctionCallback;
-import com.parse.ParseAnalytics;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -125,10 +125,69 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         fab.setVisibility(View.VISIBLE);
 
-        MyApplication.dimensions.clear();
-        MyApplication.dimensions.put("Shark", name);
-        ParseAnalytics.trackEventInBackground("Tracks", MyApplication.dimensions);
 
+    }
+
+    public void createTrackFromTabber(final String name)
+    {
+        createDialog("Loading Shark Track");
+        if(temporaryStartMarker != null)
+            temporaryStartMarker.remove();
+
+        if(mCurrentMarkerSelected != null)
+            mCurrentMarkerSelected.remove();
+
+        for(Polyline p : mPolyLines)
+        {
+            p.remove();
+        }
+
+        adjustUI(0);
+
+
+        for(Marker m : markerList)
+        {
+            if(m.getTitle().equals(name))
+            {
+                m.setVisible(true);
+            }
+            else
+            {
+                m.setVisible(false);
+            }
+        }
+
+
+
+        MyApplication.sharkTrackParams.put("shark", name);
+        ParseCloud.callFunctionInBackground("createSharkTrack", MyApplication.sharkTrackParams, new FunctionCallback<ArrayList<ParseGeoPoint>>() {
+            @Override
+            public void done(ArrayList<ParseGeoPoint> parseObjects, ParseException e) {
+
+                if (e == null) {
+
+                    ArrayList<LatLng> mLatLngs = new ArrayList<>();
+
+                    for (ParseGeoPoint geoPoint : parseObjects)
+                        mLatLngs.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
+
+
+                    if (mCurrentMarkerSelected == null) {
+                        for (Marker m : markerList) {
+                            if (m.getTitle().equals(name))
+                                m.setVisible(true);
+                        }
+                    }
+
+                    mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
+                    mDialog.dismiss();
+                    MyApplication.sharkTrackParams.clear();
+
+
+                }
+
+            }
+        });
 
     }
 
@@ -281,7 +340,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Intent intent = new Intent(getActivity(), SharkActivity.class);
         intent.putExtra("name", marker.getTitle());
 
-        startActivity(intent);
+        startActivityForResult(intent, 1);
 
     }
 
@@ -354,6 +413,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapView.onLowMemory();
 
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                closeSnackBar();
+                createSharkTrack(data.getStringExtra("trackName"));
+            }
+        }
     }
 
     @Override

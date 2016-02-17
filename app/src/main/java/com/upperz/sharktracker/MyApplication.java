@@ -24,7 +24,6 @@ public class MyApplication extends Application
     public final static Map<String, String> dimensions = new HashMap<>();
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
-    public static ParseObject mCurrentObjectParseObject;
     public static String mCurrentSharkSelected;
 
 

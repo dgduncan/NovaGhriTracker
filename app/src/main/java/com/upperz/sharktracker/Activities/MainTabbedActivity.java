@@ -24,6 +24,8 @@ public class MainTabbedActivity extends AppCompatActivity {
 
 
     public MapFragment mf;
+    public ListFragment lf;
+    public SponsorFragment sf;
 
 
     @Override
@@ -57,6 +59,11 @@ public class MainTabbedActivity extends AppCompatActivity {
                 if (position == 0)
                 {
                     mf.createSnackBar();
+                    if(lf.trackName != null)
+                    {
+                        mf.createTrackFromTabber(lf.trackName);
+                        lf.trackName = null;
+                    }
                 }
                 else
                     mf.closeSnackBar();
@@ -126,11 +133,13 @@ public class MainTabbedActivity extends AppCompatActivity {
             }
             if(position == 1)
             {
-                return new ListFragment();
+                lf = new ListFragment();
+                return lf;
             }
             if(position == 2)
             {
-                return new SponsorFragment();
+                sf = new SponsorFragment();
+                return sf;
             }
 
 

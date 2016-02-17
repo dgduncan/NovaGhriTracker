@@ -26,13 +26,17 @@ public class Animal
 
     public boolean activeFlag;
     public String name;
+    public String date;
     public String sex;
+    public String days;
 
     public Animal(ParseObject animal)
     {
 
         this.activeFlag = checkIfRecent(animal);
         this.name = animal.getString("shark");
+        this.date = animal.getString("date");
+        this.days = animal.getString("sequence");
         this.sex = animal.getString("sex");
         this.latestLocation = createMarkerOptions(animal);
 
@@ -64,6 +68,7 @@ public class Animal
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_measle));
         }
     }
+
 
 
 }

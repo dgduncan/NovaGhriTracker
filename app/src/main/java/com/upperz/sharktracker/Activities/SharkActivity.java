@@ -1,17 +1,16 @@
 package com.upperz.sharktracker.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
-import com.upperz.sharktracker.Adapters.InfoAdapter;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
@@ -32,30 +31,19 @@ public class SharkActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent();
+                intent.putExtra("trackName", getIntent().getStringExtra("name"));
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.infoRecycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
 
-
-        InfoAdapter infoAdapter = new InfoAdapter(MyApplication.animals.get(getIntent().getStringExtra("name")));
-
-        recyclerView.setAdapter(infoAdapter);
+        updateViews();
 
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_shark, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -71,5 +59,26 @@ public class SharkActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateViews()
+    {
+        Animal animal = MyApplication.animals.get(getIntent().getStringExtra("name"));
+
+        TextView sex = (TextView)findViewById(R.id.sex);
+        TextView latitude = (TextView)findViewById(R.id.latitude);
+        TextView longitude = (TextView)findViewById(R.id.longitude);
+        TextView date = (TextView)findViewById(R.id.date);
+        TextView days = (TextView)findViewById(R.id.days);
+        TextView name = (TextView)findViewById(R.id.name);
+
+
+        name.setText(animal.name);
+        date.setText(animal.date);
+        days.setText(animal.days);
+        sex.setText(animal.sex);
+        latitude.setText(String.valueOf(animal.latestLocation.getPosition().latitude));
+        longitude.setText(String.valueOf(animal.latestLocation.getPosition().longitude));
+
     }
 }
