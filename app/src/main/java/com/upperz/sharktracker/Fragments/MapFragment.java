@@ -186,7 +186,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     if (mCurrentMarkerSelected == null) {
                         for (Marker m : markerList) {
                             if (m.getTitle().equals(name))
+                            {
                                 m.setVisible(true);
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(m.getPosition(), 5), 2000, null);
+                            }
                         }
                     }
 

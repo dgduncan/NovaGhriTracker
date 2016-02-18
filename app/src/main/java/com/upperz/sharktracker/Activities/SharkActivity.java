@@ -78,12 +78,14 @@ public class SharkActivity extends AppCompatActivity {
         TextView date = (TextView)findViewById(R.id.date);
         TextView days = (TextView)findViewById(R.id.days);
         TextView name = (TextView)findViewById(R.id.name);
+        TextView species = (TextView)findViewById(R.id.species);
 
 
         name.setText(animal.name);
         date.setText(animal.date);
         days.setText(animal.days);
         sex.setText(animal.sex);
+        species.setText(animal.species);
         latitude.setText(String.valueOf(animal.latestLocation.getPosition().latitude));
         longitude.setText(String.valueOf(animal.latestLocation.getPosition().longitude));
 

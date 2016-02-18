@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.upperz.sharktracker.R;
 
@@ -16,12 +15,8 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-
 public class Animal
 {
-    public ArrayList<ParseGeoPoint> allLocations = new ArrayList<>();
-    public MarkerOptions firstLocation;
     public MarkerOptions latestLocation;
 
     public boolean activeFlag;
@@ -29,6 +24,7 @@ public class Animal
     public String date;
     public String sex;
     public String days;
+    public String species;
 
     public Animal(ParseObject animal)
     {
@@ -39,6 +35,7 @@ public class Animal
         this.days = animal.getString("sequence");
         this.sex = animal.getString("sex");
         this.latestLocation = createMarkerOptions(animal);
+        this.species = animal.getString("species");
 
     }
 
