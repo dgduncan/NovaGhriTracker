@@ -17,15 +17,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.upperz.sharktracker.Activities.SharkActivity;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
@@ -44,6 +48,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     public Snackbar snack;
 
+    public boolean trackShown;
     public FloatingActionButton fab;
     public Marker temporaryStartMarker;
     public Marker temporaryEndMarker;
@@ -86,12 +91,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void createSharkTrack(final String name)
     {
 
+        trackShown = true;
+
         createDialog("Loading Shark Track");
         if(temporaryStartMarker != null)
             temporaryStartMarker.remove();
 
         adjustUI(0);
 
+        createInitialTaggingLocation(name);
         MyApplication.sharkTrackParams.put("shark", name);
         ParseCloud.callFunctionInBackground("createSharkTrack", MyApplication.sharkTrackParams, new FunctionCallback<ArrayList<ParseGeoPoint>>() {
             @Override
@@ -130,6 +138,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     public void createTrackFromTabber(final String name)
     {
+        trackShown = true;
+
         createDialog("Loading Shark Track");
         if(temporaryStartMarker != null)
             temporaryStartMarker.remove();
@@ -157,6 +167,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         }
 
+        createInitialTaggingLocation(name);
 
 
         MyApplication.sharkTrackParams.put("shark", name);
@@ -191,9 +202,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
+    public void createInitialTaggingLocation(String name)
+    {
+        ParseQuery<ParseObject> mInitialQuery = ParseQuery.getQuery("Animals");
+        mInitialQuery.whereEqualTo("shark", name);
+        mInitialQuery.whereEqualTo("sequence", "1");
+        mInitialQuery.setLimit(1);
+        mInitialQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if(e == null)
+                {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(new LatLng(Double.valueOf(list.get(0).getString("latitude")), Double.valueOf(list.get(0).getString("longitude"))))
+                            .title(list.get(0).getString("shark"))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
+                    temporaryStartMarker = map.addMarker(markerOptions);
+                }
+            }
+        });
+    }
+
     public void zoomOutAndReload()
     {
 
+
+        trackShown = false;
 
         mCurrentMarkerSelected = null;
 
@@ -430,13 +464,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-        marker.showInfoWindow();
+        if(!trackShown)
+        {
+            marker.showInfoWindow();
 
-        mCurrentMarkerSelected = marker;
+            mCurrentMarkerSelected = marker;
 
-        createSnackBar();
+            createSnackBar();
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 5), 2000, null);
+
+        }
+
 
         return true;
     }

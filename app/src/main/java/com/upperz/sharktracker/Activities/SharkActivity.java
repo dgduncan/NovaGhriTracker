@@ -10,9 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
+
+import java.util.List;
 
 public class SharkActivity extends AppCompatActivity {
 
@@ -40,6 +46,7 @@ public class SharkActivity extends AppCompatActivity {
 
 
         updateViews();
+        getDistanceTraveled();
 
 
     }
@@ -80,5 +87,45 @@ public class SharkActivity extends AppCompatActivity {
         latitude.setText(String.valueOf(animal.latestLocation.getPosition().latitude));
         longitude.setText(String.valueOf(animal.latestLocation.getPosition().longitude));
 
+    }
+
+    public static float distFrom(double lat1, double lng1, double lat2, double lng2)
+    {
+        double earthRadius = 6371000;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return (float) (earthRadius * c);
+    }
+
+    public void getDistanceTraveled()
+    {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Animals");
+        query.whereEqualTo("shark", getIntent().getStringExtra("name"));
+        query.setLimit(1000);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if(e == null)
+                {
+                    float distance = 0;
+
+                    for(int i = 0; i < list.size()-1; i++)
+                    {
+                        distance = distance + distFrom(Double.valueOf(list.get(i).getString("latitude")),
+                                Double.valueOf(list.get(i).getString("longitude")),
+                                Double.valueOf(list.get(i+1).getString("latitude")),
+                                Double.valueOf(list.get(i+1).getString("longitude")));
+                    }
+
+                    TextView daysTracked = (TextView)findViewById(R.id.daysTracked);
+                    daysTracked.setText(String.valueOf((int) (distance * 0.000621371)));
+                }
+            }
+        });
     }
 }
