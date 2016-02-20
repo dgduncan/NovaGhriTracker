@@ -39,26 +39,38 @@ public class SplashActivity extends AppCompatActivity {
     {
         showDialog("Updating Animal Locations");
 
-        ParseCloud.callFunctionInBackground("getLatestLocations", MyApplication.params, new FunctionCallback<ArrayList<ParseObject>>() {
-            @Override
-            public void done(final ArrayList<ParseObject> p, ParseException e) {
-                if (e == null) {
-                    MyApplication.sharks.addAll(p);
+        if(MyApplication.sharks.size() == 0)
+        {
+            ParseCloud.callFunctionInBackground("getLatestLocations", MyApplication.params, new FunctionCallback<ArrayList<ParseObject>>() {
+                @Override
+                public void done(final ArrayList<ParseObject> p, ParseException e) {
+                    if (e == null) {
+                        MyApplication.sharks.addAll(p);
 
-                    createAnimalReferences(p);
+                        createAnimalReferences(p);
 
 
-                    pDialog.dismissWithAnimation();
+                        pDialog.dismissWithAnimation();
 
-                    Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else
-                    Log.d(TAG, e.toString());
+                        Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else
+                        Log.d(TAG, e.toString());
 
-            }
+                }
 
-        });
+            });
+        }
+
+        else
+        {
+            Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+
 
 
 

@@ -21,7 +21,6 @@ public class MyApplication extends Application
     public final static HashMap<String, Object> params = new HashMap<>();
     public final static HashMap<String, Object> sharkTrackParams = new HashMap<>();
     public static List<ParseObject> sharks = new ArrayList<>();
-    public final static Map<String, String> dimensions = new HashMap<>();
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
     public static String mCurrentSharkSelected;

@@ -192,6 +192,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             }
                         }
                     }
+                    else
+                    {
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentMarkerSelected.getPosition(), 5), 2000, null);
+                    }
 
                     mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
                     mDialog.dismiss();
