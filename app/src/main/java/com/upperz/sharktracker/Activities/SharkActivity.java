@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -47,6 +48,7 @@ public class SharkActivity extends AppCompatActivity {
 
         updateViews();
         getDistanceTraveled();
+        updatePicture();
 
 
     }
@@ -129,5 +131,64 @@ public class SharkActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void updatePicture()
+    {
+        ImageView animalImage = (ImageView)findViewById(R.id.toolbarImage);
+        switch(MyApplication.animals.get(getIntent().getStringExtra("name")).project)
+        {
+            case "bluemarlin":
+                animalImage.setImageResource(R.drawable.whitemarlin_1);
+                break;
+            case "caribbeanmakosharks":
+                animalImage.setImageResource(R.drawable.mako_awesome_image);
+                break;
+            case "enpmakosharks":
+                animalImage.setImageResource(R.drawable.mako_mexico);
+                break;
+            case "makosharks":
+                animalImage.setImageResource(R.drawable.mako_mexico);
+                break;
+            case "makosharksmexico":
+                animalImage.setImageResource(R.drawable.mako_mexico);
+                break;
+            case "owtsharks":
+                animalImage.setImageResource(R.drawable.owt_orig);
+                break;
+            case "sailfish":
+                animalImage.setImageResource(R.drawable.sailfish3);
+                break;
+            case "sandtiger":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigerbermuda2009":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigerbermuda2010":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigerbermuda2011_14":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigergrandbahama":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigergrandcayman":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "tigerwesternaustralia":
+                animalImage.setImageResource(R.drawable.tiger_image);
+                break;
+            case "whitemarlin":
+                animalImage.setImageResource(R.drawable.whitemarlin_1);
+                break;
+            case "islamakorace":
+                animalImage.setImageResource(R.drawable.mako_awesome_image);
+                break;
+            default:
+                animalImage.setImageResource(R.drawable.whitemarlin_1);
+
+        }
     }
 }

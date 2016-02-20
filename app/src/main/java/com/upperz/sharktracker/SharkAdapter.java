@@ -94,16 +94,16 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);
                 break;
             case "caribbeanmakosharks":
-                x.mProfilePic.setImageResource(R.drawable.mako_1);
+                x.mProfilePic.setImageResource(R.drawable.mako_awesome_image);
                 break;
             case "enpmakosharks":
-                x.mProfilePic.setImageResource(R.drawable.mako_1);
+                x.mProfilePic.setImageResource(R.drawable.mako_mexico);
                 break;
             case "makosharks":
-                x.mProfilePic.setImageResource(R.drawable.mako_1);
+                x.mProfilePic.setImageResource(R.drawable.mako_mexico);
                 break;
             case "makosharksmexico":
-                x.mProfilePic.setImageResource(R.drawable.mako_1);
+                x.mProfilePic.setImageResource(R.drawable.mako_mexico);
                 break;
             case "owtsharks":
                 x.mProfilePic.setImageResource(R.drawable.owt_orig);
@@ -112,31 +112,31 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 x.mProfilePic.setImageResource(R.drawable.sailfish3);
                 break;
             case "sandtiger":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigerbermuda2009":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigerbermuda2010":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigerbermuda2011_14":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigergrandbahama":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigergrandcayman":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigerwesternaustralia":
-                x.mProfilePic.setImageResource(R.drawable.tiger_orig);
+                x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "whitemarlin":
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);
                 break;
             case "islamakorace":
-                x.mProfilePic.setImageResource(R.drawable.mako_1);
+                x.mProfilePic.setImageResource(R.drawable.mako_awesome_image);
                 break;
             default:
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);

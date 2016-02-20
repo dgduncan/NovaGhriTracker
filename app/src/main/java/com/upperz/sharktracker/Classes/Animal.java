@@ -25,6 +25,7 @@ public class Animal
     public String sex;
     public String days;
     public String species;
+    public String project;
 
     public Animal(ParseObject animal)
     {
@@ -36,6 +37,7 @@ public class Animal
         this.sex = animal.getString("sex");
         this.latestLocation = createMarkerOptions(animal);
         this.species = animal.getString("species");
+        this.project = animal.getString("project");
 
     }
 

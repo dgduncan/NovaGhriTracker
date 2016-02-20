@@ -23,7 +23,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:src="@drawable/sailfish_1"
+                android:id="@+id/toolbarImage"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
