@@ -42,6 +42,7 @@ public class MyApplication extends Application
         createSharkSponsorMap();
     }
 
+    //TODO : Replace with something else, this can not be necessary
     private void createSharkSponsorMap()
     {
         for(String x : getResources().getStringArray(R.array.sponsor_sharks))

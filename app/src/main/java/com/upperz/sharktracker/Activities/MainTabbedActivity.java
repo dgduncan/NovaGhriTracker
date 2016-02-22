@@ -87,30 +87,6 @@ public class MainTabbedActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_tabbed, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.help_button) {
-            openHelpDialog();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -168,6 +144,10 @@ public class MainTabbedActivity extends AppCompatActivity {
 
     }
 
+
+    /***
+     * Function for opening the help dialog when the menu button is pressed
+     */
     private void openHelpDialog() {
         final MaterialDialog mMaterialDialog = new MaterialDialog(this);
         View view = View.inflate(this, R.layout.map_help_dialog, null);
@@ -180,6 +160,29 @@ public class MainTabbedActivity extends AppCompatActivity {
             }
         });
         mMaterialDialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main_tabbed, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.help_button) {
+            openHelpDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

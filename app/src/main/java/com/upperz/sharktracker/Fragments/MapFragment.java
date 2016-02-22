@@ -160,6 +160,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             if(m.getTitle().equals(name))
             {
                 m.setVisible(true);
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(m.getPosition(), 5), 2000, null);
             }
             else
             {
@@ -183,6 +184,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         mLatLngs.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
 
 
+                    /*
                     if (mCurrentMarkerSelected == null) {
                         for (Marker m : markerList) {
                             if (m.getTitle().equals(name))
@@ -191,11 +193,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(m.getPosition(), 5), 2000, null);
                             }
                         }
-                    }
-                    else
-                    {
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentMarkerSelected.getPosition(), 5), 2000, null);
-                    }
+                    }*/
 
                     mPolyLines.add(map.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
                     mDialog.dismiss();

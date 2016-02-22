@@ -18,23 +18,29 @@ import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class SplashActivity extends AppCompatActivity {
-
-
-
+public class SplashActivity extends AppCompatActivity
+{
+    /*Tag for use in logging*/
     String TAG = getClass().getSimpleName();
 
+    /*Dialog to notify user that app is loading*/
     SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*Must initialize this first in order to create marker options*/
         MapsInitializer.initialize(getApplicationContext());
 
+        /*Query Parse to get latest locations*/
         updateLocally();
     }
 
+    /***
+     * Function used to query parse for the latest locations and to create animal objects
+     * from the returned query data.
+     */
     private void updateLocally()
     {
         showDialog("Updating Animal Locations");
@@ -76,6 +82,7 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    //TODO : Search if there is another dialog option that will not block logo. Is this even necessary?
     private void showDialog(String dialogTitle)
     {
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
@@ -85,6 +92,11 @@ public class SplashActivity extends AppCompatActivity {
         pDialog.show();
     }
 
+    /***
+     * Function used to create all of the animal objects used
+     * @param latestLocationsOfAnimals the list of parseobjects returned from query to be made into
+     *                                 animal objects
+     */
     private void createAnimalReferences(ArrayList<ParseObject> latestLocationsOfAnimals)
     {
         for(ParseObject newShark : latestLocationsOfAnimals)
