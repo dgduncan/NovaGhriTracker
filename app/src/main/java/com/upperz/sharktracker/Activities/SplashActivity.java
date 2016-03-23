@@ -2,6 +2,7 @@ package com.upperz.sharktracker.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
@@ -48,7 +52,7 @@ public class SplashActivity extends AppCompatActivity
      */
     private void updateLocally()
     {
-        /*showDialog("Updating Animal Locations");
+        showDialog("Updating Animal Locations");
 
         if(MyApplication.sharks.size() == 0)
         {
@@ -80,9 +84,9 @@ public class SplashActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         }
-        */
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "STEVE S"));
+
+        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "STEVE S"));
 
 
 
