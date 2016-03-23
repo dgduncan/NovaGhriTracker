@@ -7,6 +7,11 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.repackaged.org.joda.time.DateTime;
+import com.google.appengine.repackaged.org.joda.time.Days;
+import com.google.appengine.repackaged.org.joda.time.LocalDateTime;
+import com.google.appengine.repackaged.org.joda.time.format.DateTimeFormat;
+import com.google.appengine.repackaged.org.joda.time.format.DateTimeFormatter;
 import com.googlecode.objectify.ObjectifyService;
 import com.opencsv.CSVReader;
 
@@ -52,54 +57,22 @@ public class AnimalUpdateRegular extends HttpServlet
     private ArrayList<ArrayList<String[]>> sharkLists = new ArrayList<>();
 
     /***
-     * The index in the CSV that contains the common name
+     * The indexes in the CSV that contain the information
      */
     private int commonNameIndex;
-
-    /***
-     * The index in the CSV that contains the date
-     */
     private int dateIndex;
-
-    /***
-     * The index in the CSV that contains the latitude
-     */
     private int latitudeIndex;
-
-    /***
-     * The index in the CSV that contains the longitude
-     */
     private int longitudeIndex;
+    private int nameIndex;
+    private int sexIndex;
+    private int sizeIndex;
+    private int speciesIndex;
+    private int taggingVideoIndex;
 
-    /***
-     * The root of the url where the CSVs are located
-     */
+
     private String root = "http://cnso.nova.edu/sharktracking/sharkmap/controlfiles/";
 
-    /***
-     * The index in the CSV that contains the name
-     */
-    private int nameIndex;
 
-    /***
-     * The index in the CSV that contains the sex
-     */
-    private int sexIndex;
-
-    /***
-     * The index in the CSV that contains the size
-     */
-    private int sizeIndex;
-
-    /***
-     * THe index in the CSV that contains the species
-     */
-    private int speciesIndex;
-
-    /***
-     * The index in the CSV that contains the tagging video
-     */
-    private int taggingVideoIndex;
 
     private BufferedReader in;
 
@@ -238,6 +211,8 @@ public class AnimalUpdateRegular extends HttpServlet
                 currentSharkArray = new ArrayList<>();
 
                 currentShark = currentRow[nameIndex];
+
+                currentSharkArray.add(currentRow);
             }
         }
 
@@ -312,6 +287,8 @@ public class AnimalUpdateRegular extends HttpServlet
 
         entity.setProperty("sequence", Integer.parseInt(x[0]));
 
+        entity.setProperty("recent", checkIfRecent(date));
+
         datastoreService.put(entity);
 
     }
@@ -325,6 +302,15 @@ public class AnimalUpdateRegular extends HttpServlet
 
 
         for (Entity entity : preparedQuery.asIterable()) datastoreService.delete(entity.getKey());
+
+    }
+
+    private boolean checkIfRecent(String date) {
+
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
+        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+
+        return Days.daysBetween(dateTime, new LocalDateTime().toDateTime()).getDays() <= 14;
 
     }
 }
