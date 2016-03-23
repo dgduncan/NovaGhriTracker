@@ -1,19 +1,24 @@
 package com.upperz.sharktracker.Activities;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.dgduncan.myapplication.backend.myApi.MyApi;
+import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
 import com.google.android.gms.maps.MapsInitializer;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.parse.ParseObject;
 import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -43,7 +48,7 @@ public class SplashActivity extends AppCompatActivity
      */
     private void updateLocally()
     {
-        showDialog("Updating Animal Locations");
+        /*showDialog("Updating Animal Locations");
 
         if(MyApplication.sharks.size() == 0)
         {
@@ -75,6 +80,9 @@ public class SplashActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         }
+        */
+
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "STEVE S"));
 
 
 
@@ -104,5 +112,58 @@ public class SplashActivity extends AppCompatActivity
             MyApplication.animals.put(newShark.getString("shark"), new Animal(newShark));
         }
 
+    }
+
+    class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, AnimalCollection>
+    {
+
+        private MyApi myApiService = null;
+        private Context context;
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute()
+        {
+            progressDialog = new ProgressDialog(SplashActivity.this);
+
+            progressDialog.setMessage("Loading Animal ... ");
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected AnimalCollection doInBackground(Pair<Context, String>... params)
+        {
+            if(myApiService == null) {  // Only do this once
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://learned-iridium-124717.appspot.com/_ah/api/");
+
+                myApiService = builder.build();
+            }
+
+            context = params[0].first;
+            String name = params[0].second;
+
+
+            try {
+                return myApiService.getAllAnimals().execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(AnimalCollection result) {
+            progressDialog.dismiss();
+
+            Log.d("MainActivity", String.valueOf(result.getItems().size()));
+        }
     }
 }
