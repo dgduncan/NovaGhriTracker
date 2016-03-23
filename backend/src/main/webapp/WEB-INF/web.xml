@@ -19,30 +19,30 @@
     </welcome-file-list>
 
     <servlet>
-        <servlet-name>SharkUpdateTest</servlet-name>
-        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.SharkUpdate</servlet-class>
+        <servlet-name>AnimalUpdateRegular</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.AnimalUpdateRegular</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>SharkUpdateTest</servlet-name>
-        <url-pattern>/sharkupdatetest</url-pattern>
+        <servlet-name>AnimalUpdateRegular</servlet-name>
+        <url-pattern>/animalupdateregular</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>TrackUpdate</servlet-name>
-        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdate</servlet-class>
+        <servlet-name>TrackUpdateFull</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdateFull</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TrackUpdate</servlet-name>
-        <url-pattern>/trackupdate</url-pattern>
+        <servlet-name>TrackUpdateFull</servlet-name>
+        <url-pattern>/trackupdatefull</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>TrackUpdateTest</servlet-name>
-        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdateTest</servlet-class>
+        <servlet-name>TrackUpdateRegular</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdateRegular</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>TrackUpdateTest</servlet-name>
-        <url-pattern>/trackupdatetest</url-pattern>
+        <servlet-name>TrackUpdateRegular</servlet-name>
+        <url-pattern>/trackupdateregular</url-pattern>
     </servlet-mapping>
 
     <filter>

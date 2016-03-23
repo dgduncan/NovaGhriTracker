@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
     <cron>
-        <url>/trackupdatetest</url>
+        <url>/trackupdateregular</url>
         <description>Update for new tracks</description>
         <schedule>every day 5:30</schedule>
         <timezone>America/New_York</timezone>
@@ -11,7 +11,7 @@
         </retry-parameters>
     </cron>
     <cron>
-        <url>/sharkupdatetest</url>
+        <url>/animalupdateregular</url>
         <description>Update for latest on sharks</description>
         <schedule>every day 7:00</schedule>
         <timezone>America/New_York</timezone>
