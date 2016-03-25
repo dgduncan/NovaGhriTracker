@@ -1,39 +1,23 @@
 package com.upperz.sharktracker.Activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.util.Pair;
+import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.dgduncan.myapplication.backend.myApi.MyApi;
 import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.upperz.sharktracker.Classes.Animal;
-import com.upperz.sharktracker.MyApplication;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SplashActivity extends AppCompatActivity
 {
-    /*Tag for use in logging*/
-    String TAG = getClass().getSimpleName();
-
-    /*Dialog to notify user that app is loading*/
-    SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,120 +26,105 @@ public class SplashActivity extends AppCompatActivity
         /*Must initialize this first in order to create marker options*/
         MapsInitializer.initialize(getApplicationContext());
 
-        /*Query Parse to get latest locations*/
-        updateLocally();
+        /*Query GAE to get latest locations*/
+        queryAnimals();
     }
 
     /***
-     * Function used to query parse for the latest locations and to create animal objects
+     * Function used to query GAE for the latest locations and to create animal objects
      * from the returned query data.
      */
-    private void updateLocally()
+    private void queryAnimals()
     {
-        showDialog("Updating Animal Locations");
-
-        if(MyApplication.sharks.size() == 0)
-        {
-            ParseCloud.callFunctionInBackground("getLatestLocations", MyApplication.params, new FunctionCallback<ArrayList<ParseObject>>() {
-                @Override
-                public void done(final ArrayList<ParseObject> p, ParseException e) {
-                    if (e == null) {
-                        MyApplication.sharks.addAll(p);
-
-                        createAnimalReferences(p);
-
-
-                        pDialog.dismissWithAnimation();
-
-                        Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else
-                        Log.d(TAG, e.toString());
-
-                }
-
-            });
-        }
-
-        else
-        {
-            Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-
-        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "STEVE S"));
-
-
-
-
-
+        new EndpointsAsyncTask().execute();
     }
 
-    //TODO : Search if there is another dialog option that will not block logo. Is this even necessary?
-    private void showDialog(String dialogTitle)
-    {
-        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText(dialogTitle);
-        pDialog.setCancelable(false);
-        pDialog.show();
-    }
 
     /***
-     * Function used to create all of the animal objects used
-     * @param latestLocationsOfAnimals the list of parseobjects returned from query to be made into
-     *                                 animal objects
+     * Async task that creates a reference to my AnimalApi, queries for the latest locations, and
+     * stores this data as a global variable
      */
-    private void createAnimalReferences(ArrayList<ParseObject> latestLocationsOfAnimals)
-    {
-        for(ParseObject newShark : latestLocationsOfAnimals)
-        {
-            MyApplication.animals.put(newShark.getString("shark"), new Animal(newShark));
-        }
-
-    }
-
-    class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, AnimalCollection>
+    class EndpointsAsyncTask extends AsyncTask<Void, Void, AnimalCollection>
     {
 
+        /*Reference to AsyncTask used to stop task if timer goes over time*/
+        private EndpointsAsyncTask endpointsAsyncTask = this;
+
+        /*Reference to my Backend API*/
         private MyApi myApiService = null;
-        private Context context;
 
-        ProgressDialog progressDialog;
+        /*Dialog to notify user about what is going on*/
+        private ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute()
         {
             progressDialog = new ProgressDialog(SplashActivity.this);
-
             progressDialog.setMessage("Loading Animal ... ");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+
+            new CountDownTimer(10000, 10000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //Empty on purpose
+
+                }
+
+                @Override
+                public void onFinish()
+                {
+                    /*Check if AsyncTask is actually still runnning*/
+                    if(endpointsAsyncTask.getStatus() == Status.RUNNING)
+                    {
+                        //Cancel task if still running
+                        endpointsAsyncTask.cancel(true);
+
+                        progressDialog.dismiss();
+
+                        //Create an alert dialog asking user to retry
+                        new AlertDialog.Builder(SplashActivity.this)
+                                .setTitle("Connection Error")
+                                .setMessage("There seems to be an issue connecting to our backend," +
+                                        " would you like to retry?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        new EndpointsAsyncTask().execute();
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+                    }
+
+                }
+            }.start();
+
             super.onPreExecute();
 
         }
 
         @Override
-        protected AnimalCollection doInBackground(Pair<Context, String>... params)
+        protected AnimalCollection doInBackground(Void ... params)
         {
-            if(myApiService == null) {  // Only do this once
+            /*Build API service*/
+            if(myApiService == null)
+            {
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                         .setRootUrl("https://learned-iridium-124717.appspot.com/_ah/api/");
 
                 myApiService = builder.build();
             }
 
-            context = params[0].first;
-            String name = params[0].second;
-
-
-            try {
+            /*Attempt to get animals from API*/
+            try
+            {
                 return myApiService.getAllAnimals().execute();
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
                 return null;
             }
@@ -167,7 +136,9 @@ public class SplashActivity extends AppCompatActivity
         protected void onPostExecute(AnimalCollection result) {
             progressDialog.dismiss();
 
-            Log.d("MainActivity", String.valueOf(result.getItems().size()));
+            //Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+            //startActivity(intent);
+            //finish();
         }
     }
 }

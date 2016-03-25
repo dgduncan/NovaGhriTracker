@@ -17,6 +17,8 @@ public class Animal {
 
     private String name;
 
+    private boolean recent;
+
     private String sex;
 
     private String size;
