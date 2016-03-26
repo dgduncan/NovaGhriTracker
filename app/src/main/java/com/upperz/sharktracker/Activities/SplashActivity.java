@@ -8,13 +8,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.dgduncan.myapplication.backend.myApi.MyApi;
+import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.upperz.sharktracker.MyApplication;
 
 import java.io.IOException;
 
@@ -68,7 +69,7 @@ public class SplashActivity extends AppCompatActivity
             progressDialog.show();
 
 
-            new CountDownTimer(10000, 10000) {
+            new CountDownTimer(15000, 15000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     //Empty on purpose
@@ -138,6 +139,13 @@ public class SplashActivity extends AppCompatActivity
         protected void onPostExecute(AnimalCollection result)
         {
             progressDialog.dismiss();
+
+            MyApplication.sharks = result.getItems();
+
+            for(Animal animal : result.getItems())
+            {
+                MyApplication.animals.put(animal.getName(), animal);
+            }
 
             Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
             startActivity(intent);

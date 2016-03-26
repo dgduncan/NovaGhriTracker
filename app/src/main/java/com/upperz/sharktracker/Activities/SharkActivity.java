@@ -8,7 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
 public class SharkActivity extends AppCompatActivity {
@@ -36,9 +40,9 @@ public class SharkActivity extends AppCompatActivity {
         });
 
 
-        //updateViews();
+        updateViews();
         //getDistanceTraveled();
-        //updatePicture();
+        updatePicture();
 
 
     }
@@ -60,7 +64,7 @@ public class SharkActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*
+
     public void updateViews()
     {
         Animal animal = MyApplication.animals.get(getIntent().getStringExtra("name"));
@@ -74,13 +78,13 @@ public class SharkActivity extends AppCompatActivity {
         TextView species = (TextView)findViewById(R.id.species);
 
 
-        name.setText(animal.name);
-        date.setText(animal.date);
-        days.setText(animal.days);
-        sex.setText(animal.sex);
-        species.setText(animal.species);
-        latitude.setText(String.valueOf(animal.latestLocation.getPosition().latitude));
-        longitude.setText(String.valueOf(animal.latestLocation.getPosition().longitude));
+        name.setText(animal.getName());
+        date.setText(animal.getDate());
+        days.setText(String.valueOf(animal.getSequence()));
+        sex.setText(animal.getSex());
+        species.setText(animal.getSpecies());
+        latitude.setText(String.valueOf(animal.getCurrentLocation().getLatitude()));
+        longitude.setText(String.valueOf(animal.getCurrentLocation().getLongitude()));
 
     }
 
@@ -97,6 +101,7 @@ public class SharkActivity extends AppCompatActivity {
         return (float) (earthRadius * c);
     }
 
+    /*
     public void getDistanceTraveled()
     {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Animals");
@@ -122,17 +127,17 @@ public class SharkActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     public void updatePicture()
     {
         ImageView animalImage = (ImageView)findViewById(R.id.toolbarImage);
-        switch(MyApplication.animals.get(getIntent().getStringExtra("name")).project)
+        switch(MyApplication.animals.get(getIntent().getStringExtra("name")).getCommonName())
         {
-            case "bluemarlin":
+            case "Blue Marlin":
                 animalImage.setImageResource(R.drawable.whitemarlin_1);
                 break;
-            case "caribbeanmakosharks":
+            case "Mako Shark":
                 animalImage.setImageResource(R.drawable.mako_awesome_image);
                 break;
             case "enpmakosharks":
@@ -144,34 +149,19 @@ public class SharkActivity extends AppCompatActivity {
             case "makosharksmexico":
                 animalImage.setImageResource(R.drawable.mako_mexico);
                 break;
-            case "owtsharks":
+            case "Oceanic Whitetip Shark":
                 animalImage.setImageResource(R.drawable.owt_orig);
                 break;
             case "sailfish":
                 animalImage.setImageResource(R.drawable.sailfish3);
                 break;
-            case "sandtiger":
+            case "Sand Tiger Shark":
                 animalImage.setImageResource(R.drawable.tiger_image);
                 break;
-            case "tigerbermuda2009":
+            case "Tiger Shark":
                 animalImage.setImageResource(R.drawable.tiger_image);
                 break;
-            case "tigerbermuda2010":
-                animalImage.setImageResource(R.drawable.tiger_image);
-                break;
-            case "tigerbermuda2011_14":
-                animalImage.setImageResource(R.drawable.tiger_image);
-                break;
-            case "tigergrandbahama":
-                animalImage.setImageResource(R.drawable.tiger_image);
-                break;
-            case "tigergrandcayman":
-                animalImage.setImageResource(R.drawable.tiger_image);
-                break;
-            case "tigerwesternaustralia":
-                animalImage.setImageResource(R.drawable.tiger_image);
-                break;
-            case "whitemarlin":
+            case "White Marlin":
                 animalImage.setImageResource(R.drawable.whitemarlin_1);
                 break;
             case "islamakorace":
@@ -181,5 +171,5 @@ public class SharkActivity extends AppCompatActivity {
                 animalImage.setImageResource(R.drawable.whitemarlin_1);
 
         }
-    }*/
+    }
 }

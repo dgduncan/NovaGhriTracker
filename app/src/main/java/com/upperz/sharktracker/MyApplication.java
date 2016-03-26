@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.parse.Parse;
-import com.parse.ParseObject;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -19,7 +18,7 @@ public class MyApplication extends Application
 
     public static HashMap<String, Animal> animals = new HashMap<>();
     public final static HashMap<String, Object> sharkTrackParams = new HashMap<>();
-    public static List<ParseObject> sharks = new ArrayList<>();
+    public static List<Animal> sharks = new ArrayList<>();
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
     public static String mCurrentSharkSelected;

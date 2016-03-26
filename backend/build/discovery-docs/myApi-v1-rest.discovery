@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/erAD7M_aIC42aIGiXvj-YMNjOQ4\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/moioReVPDgWX_99dp7vXe3VJmK8\"",
  "discoveryVersion": "v1",
  "id": "myApi:v1",
  "name": "myApi",
@@ -80,6 +80,9 @@
     "common_name": {
      "type": "string"
     },
+    "currentLocation": {
+     "$ref": "GeoPt"
+    },
     "date": {
      "type": "string"
     },
@@ -87,7 +90,7 @@
      "type": "string",
      "format": "int64"
     },
-    "location": {
+    "initialLocation": {
      "$ref": "GeoPt"
     },
     "name": {

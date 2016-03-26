@@ -272,6 +272,7 @@ public class AnimalUpdateRegular extends HttpServlet
         Animal animal = new Animal(
                 beginning[commonNameIndex],
                 date,
+                new GeoPt(Float.valueOf(first[latitudeIndex]), Float.valueOf(first[longitudeIndex])),
                 new GeoPt(Float.valueOf(x[latitudeIndex]), Float.valueOf(x[longitudeIndex])),
                 x[nameIndex],
                 checkIfRecent(date),

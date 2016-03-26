@@ -6,7 +6,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Animal {
+public class Animal{
 
     @Id
     public Long id;
@@ -15,7 +15,9 @@ public class Animal {
 
     public String date;
 
-    public GeoPt location;
+    public GeoPt initialLocation;
+
+    public GeoPt currentLocation;
 
     @Index
     public String name;
@@ -35,12 +37,13 @@ public class Animal {
 
     public Animal(){}
 
-    public Animal(String common_name, String date,  GeoPt location, String name, boolean recent, Integer sequence,
+    public Animal(String common_name, String date,  GeoPt initialLocation, GeoPt currentLocation,  String name, boolean recent, Integer sequence,
                   String sex, String size, String species, String tagging_video)
     {
         this.common_name = common_name;
         this.date = date;
-        this.location = location;
+        this.initialLocation = initialLocation;
+        this.currentLocation = currentLocation;
         this.name = name;
         this.recent = recent;
         this.sequence = sequence;

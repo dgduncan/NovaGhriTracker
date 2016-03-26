@@ -64,7 +64,7 @@ public class TrackEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET)
     public List<Track> getTrack(@Named("name") String name) {
 
-        return ofy().load().type(Track.class).filter("name", name).list();
+        return ofy().load().type(Track.class).filter("name", name).order("sequence").list();
 
 
 
