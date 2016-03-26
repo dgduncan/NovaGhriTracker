@@ -1,7 +1,9 @@
 package com.example.dgduncan.myapplication.backend.Models;
 
+import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Animal {
@@ -9,36 +11,43 @@ public class Animal {
     @Id
     public Long id;
 
-    private String common_name;
+    public String common_name;
 
-    private String latitude;
+    public String date;
 
-    private String longitude;
+    public GeoPt location;
 
-    private String name;
+    @Index
+    public String name;
 
-    private boolean recent;
+    @Index
+    public boolean recent;
 
-    private String sex;
+    public int sequence;
 
-    private String size;
+    public String sex;
 
-    private String species;
+    public String size;
 
-    private String tagging_video;
+    public String species;
 
-
-
-    public String getName()
-    {
-        return this.name;
-    }
+    public String tagging_video;
 
     public Animal(){}
 
-    public Animal(String name)
+    public Animal(String common_name, String date,  GeoPt location, String name, boolean recent, Integer sequence,
+                  String sex, String size, String species, String tagging_video)
     {
+        this.common_name = common_name;
+        this.date = date;
+        this.location = location;
         this.name = name;
+        this.recent = recent;
+        this.sequence = sequence;
+        this.sex = sex;
+        this.size = size;
+        this.species = species;
+        this.tagging_video = tagging_video;
     }
 
 }

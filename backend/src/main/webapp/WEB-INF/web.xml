@@ -24,7 +24,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AnimalUpdateRegular</servlet-name>
-        <url-pattern>/animalupdateregular</url-pattern>
+        <url-pattern>/cron/animalupdateregular</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -33,7 +33,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>TrackUpdateFull</servlet-name>
-        <url-pattern>/trackupdatefull</url-pattern>
+        <url-pattern>/cron/trackupdatefull</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -42,7 +42,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>TrackUpdateRegular</servlet-name>
-        <url-pattern>/trackupdateregular</url-pattern>
+        <url-pattern>/cron/trackupdateregular</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -53,4 +53,15 @@
         <filter-name>ObjectifyFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>cron</web-resource-name>
+            <url-pattern>/cron/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
 </web-app>

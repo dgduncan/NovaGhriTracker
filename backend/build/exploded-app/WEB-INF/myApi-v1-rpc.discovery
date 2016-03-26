@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/SjXbLzHl5LiisLFcF466S4QTjco\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/erAD7M_aIC42aIGiXvj-YMNjOQ4\"",
  "discoveryVersion": "v1",
  "id": "myApi:v1",
  "name": "myApi",
@@ -75,11 +75,39 @@
    "id": "Animal",
    "type": "object",
    "properties": {
+    "common_name": {
+     "type": "string"
+    },
+    "date": {
+     "type": "string"
+    },
     "id": {
      "type": "string",
      "format": "int64"
     },
+    "location": {
+     "$ref": "GeoPt"
+    },
     "name": {
+     "type": "string"
+    },
+    "recent": {
+     "type": "boolean"
+    },
+    "sequence": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "sex": {
+     "type": "string"
+    },
+    "size": {
+     "type": "string"
+    },
+    "species": {
+     "type": "string"
+    },
+    "tagging_video": {
      "type": "string"
     }
    }
@@ -93,6 +121,20 @@
      "items": {
       "$ref": "Animal"
      }
+    }
+   }
+  },
+  "GeoPt": {
+   "id": "GeoPt",
+   "type": "object",
+   "properties": {
+    "latitude": {
+     "type": "number",
+     "format": "float"
+    },
+    "longitude": {
+     "type": "number",
+     "format": "float"
     }
    }
   }
@@ -111,24 +153,6 @@
   "myApi.getAnimal": {
    "id": "myApi.getAnimal",
    "allowGet": true,
-   "parameters": {
-    "name": {
-     "type": "string",
-     "required": true
-    }
-   },
-   "parameterOrder": [
-    "name"
-   ],
-   "returns": {
-    "$ref": "Animal"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "myApi.sayHi": {
-   "id": "myApi.sayHi",
    "parameters": {
     "name": {
      "type": "string",

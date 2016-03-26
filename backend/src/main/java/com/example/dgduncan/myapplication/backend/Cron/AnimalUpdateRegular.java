@@ -1,10 +1,10 @@
 package com.example.dgduncan.myapplication.backend.Cron;
 
-import com.example.dgduncan.myapplication.backend.Endpoints.TrackEndpoint;
 import com.example.dgduncan.myapplication.backend.Models.Animal;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.repackaged.org.joda.time.DateTime;
@@ -12,7 +12,6 @@ import com.google.appengine.repackaged.org.joda.time.Days;
 import com.google.appengine.repackaged.org.joda.time.LocalDateTime;
 import com.google.appengine.repackaged.org.joda.time.format.DateTimeFormat;
 import com.google.appengine.repackaged.org.joda.time.format.DateTimeFormatter;
-import com.googlecode.objectify.ObjectifyService;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
@@ -25,11 +24,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.example.dgduncan.myapplication.backend.OfyHelper.ofy;
 
 public class AnimalUpdateRegular extends HttpServlet
 {
@@ -82,14 +82,6 @@ public class AnimalUpdateRegular extends HttpServlet
      * The DataStore reference used to to query, put, and get
      */
     private DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
-
-    private static final Logger logger = Logger.getLogger(TrackEndpoint.class.getName());
-
-    static {
-        // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(Animal.class);
-    }
-
 
 
 
@@ -236,45 +228,6 @@ public class AnimalUpdateRegular extends HttpServlet
 
     private void buildEntity(String[] beginning, String[] first, String[] x)
     {
-
-        Entity entity = new Entity("Animal");
-
-        entity.setProperty("name", x[nameIndex]);
-        entity.setProperty("species", x[speciesIndex]);
-
-        if(x[sexIndex].equals(""))
-        {
-            entity.setProperty("sex", "unknown");
-        }
-
-        else
-        {
-            entity.setProperty("sex", x[sexIndex]);
-        }
-
-        entity.setProperty("common_name", beginning[commonNameIndex]);
-
-        if((first[sizeIndex].equals("")))
-        {
-            entity.setProperty("size", "unknown");
-        }
-        else
-        {
-            entity.setProperty("size", first[sizeIndex]);
-        }
-
-        if(beginning[taggingVideoIndex].equals(""))
-        {
-            entity.setProperty("tagging_video", "unknown");
-        }
-        else
-        {
-            entity.setProperty("tagging_video", beginning[taggingVideoIndex]);
-        }
-
-        entity.setProperty("latitude", x[latitudeIndex]);
-        entity.setProperty("longitude", x[longitudeIndex]);
-
         String date = x[dateIndex];
 
         if((date.indexOf(' ')) != -1)
@@ -282,14 +235,55 @@ public class AnimalUpdateRegular extends HttpServlet
             date = date.substring(0, date.indexOf(' '));
         }
 
+        String sex;
 
-        entity.setProperty("date", date);
+        if(x[sexIndex].equals(""))
+        {
+            sex = "unknown";
+        }
 
-        entity.setProperty("sequence", Integer.parseInt(x[0]));
+        else
+        {
+            sex = x[sexIndex];
+        }
 
-        entity.setProperty("recent", checkIfRecent(date));
+        String size;
 
-        datastoreService.put(entity);
+        if((first[sizeIndex].equals("")))
+        {
+            size = "unknown";
+        }
+        else
+        {
+            size = first[sizeIndex];
+        }
+
+        String tagging_video;
+
+        if(beginning[taggingVideoIndex].equals(""))
+        {
+            tagging_video = "unknown";
+        }
+        else
+        {
+            tagging_video = beginning[taggingVideoIndex];
+        }
+
+        Animal animal = new Animal(
+                beginning[commonNameIndex],
+                date,
+                new GeoPt(Float.valueOf(x[latitudeIndex]), Float.valueOf(x[longitudeIndex])),
+                x[nameIndex],
+                checkIfRecent(date),
+                Integer.parseInt(x[0]),
+                sex,
+                size,
+                x[speciesIndex],
+                tagging_video);
+
+        ofy().save().entity(animal).now();
+
+
 
     }
 
@@ -302,6 +296,7 @@ public class AnimalUpdateRegular extends HttpServlet
 
 
         for (Entity entity : preparedQuery.asIterable()) datastoreService.delete(entity.getKey());
+
 
     }
 

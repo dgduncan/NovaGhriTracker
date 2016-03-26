@@ -2,9 +2,9 @@ package com.upperz.sharktracker;
 
 import android.app.Application;
 
+import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.upperz.sharktracker.Classes.Animal;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 

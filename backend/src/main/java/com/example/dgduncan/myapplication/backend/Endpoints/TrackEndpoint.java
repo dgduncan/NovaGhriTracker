@@ -5,14 +5,13 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.NotFoundException;
-import com.googlecode.objectify.ObjectifyService;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import static com.example.dgduncan.myapplication.backend.OfyHelper.ofy;
+
 
 /**
  * WARNING: This generated code is intended as a sample or starting point for using a
@@ -32,16 +31,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
         )
 )
 public class TrackEndpoint {
-
-    private static final Logger logger = Logger.getLogger(TrackEndpoint.class.getName());
-
-    private static final int DEFAULT_LIST_LIMIT = 20;
-
-    static {
-        // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(Track.class);
-    }
-
     /**
      * Returns the {@link Track} with the corresponding ID.
      *
@@ -49,6 +38,7 @@ public class TrackEndpoint {
      * @return the entity with the corresponding ID
      * @throws NotFoundException if there is no {@code Track} with the provided ID.
      */
+    /*
     @ApiMethod(
             name = "get",
             path = "track/{id}",
@@ -60,7 +50,7 @@ public class TrackEndpoint {
             throw new NotFoundException("Could not find Track with ID: " + id);
         }
         return track;
-    }
+    }*/
 
 
     /**
@@ -79,16 +69,5 @@ public class TrackEndpoint {
 
 
 
-
-
-
     }
-
-    /*private void checkExists(long id) throws NotFoundException {
-        try {
-            ofy().load().type(Track.class).id(id).safe();
-        } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find Track with ID: " + id);
-        }
-    }*/
 }

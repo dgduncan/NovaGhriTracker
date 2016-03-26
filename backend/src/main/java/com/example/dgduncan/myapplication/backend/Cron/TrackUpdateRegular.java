@@ -1,9 +1,11 @@
 package com.example.dgduncan.myapplication.backend.Cron;
 
 import com.example.dgduncan.myapplication.backend.Endpoints.TrackEndpoint;
+import com.example.dgduncan.myapplication.backend.Models.Track;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.opencsv.CSVReader;
@@ -23,6 +25,8 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.example.dgduncan.myapplication.backend.OfyHelper.ofy;
 
 /***
  * Written by: Derek Duncan
@@ -209,14 +213,11 @@ public class TrackUpdateRegular extends HttpServlet
      */
     private void buildEntity(String[] x)
     {
-        Entity entity = new Entity("Track");
+        Track track = new Track(x[nameIndex],
+                new GeoPt(Float.valueOf(x[latitudeIndex]), Float.valueOf(x[longitudeIndex])),
+                Integer.valueOf(x[sequenceIndex]));
 
-        entity.setProperty("name", x[nameIndex]);
-        entity.setProperty("latitude", x[latitudeIndex]);
-        entity.setProperty("longitude", x[longitudeIndex]);
-        entity.setProperty("sequence", Integer.parseInt(x[sequenceIndex]));
-
-        datastore.put(entity);
+        ofy().save().entity(track).now();
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.dgduncan.myapplication.backend;
 
 import com.example.dgduncan.myapplication.backend.Models.Animal;
+import com.example.dgduncan.myapplication.backend.Models.Track;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
@@ -12,6 +13,7 @@ public final class OfyHelper {
 
     static {
         factory().register(Animal.class);
+        factory().register(Track.class);
     }
 
     /**

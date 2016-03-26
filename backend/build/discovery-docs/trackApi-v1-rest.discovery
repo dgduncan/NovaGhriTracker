@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/PdtbXSjVn8Il4TWvG-80kv9HdR8\"",
+ "etag": "\"u_zXkMELIlX4ktyNbM2XKD4vK8E/1yNFO89UjiVM6-R12EVRFWjzPV4\"",
  "discoveryVersion": "v1",
  "id": "trackApi:v1",
  "name": "trackApi",
@@ -73,28 +73,37 @@
   }
  },
  "schemas": {
+  "GeoPt": {
+   "id": "GeoPt",
+   "type": "object",
+   "properties": {
+    "latitude": {
+     "type": "number",
+     "format": "float"
+    },
+    "longitude": {
+     "type": "number",
+     "format": "float"
+    }
+   }
+  },
   "Track": {
    "id": "Track",
    "type": "object",
    "properties": {
-    "date": {
-     "type": "string"
-    },
     "id": {
      "type": "string",
      "format": "int64"
     },
-    "latitude": {
-     "type": "string"
-    },
-    "longitude": {
-     "type": "string"
+    "location": {
+     "$ref": "GeoPt"
     },
     "name": {
      "type": "string"
     },
     "sequence": {
-     "type": "string"
+     "type": "integer",
+     "format": "int32"
     }
    }
   },
@@ -112,28 +121,6 @@
   }
  },
  "methods": {
-  "get": {
-   "id": "trackApi.get",
-   "path": "track/{id}",
-   "httpMethod": "GET",
-   "parameters": {
-    "id": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "id"
-   ],
-   "response": {
-    "$ref": "Track"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
   "getTrack": {
    "id": "trackApi.getTrack",
    "path": "getTrack",

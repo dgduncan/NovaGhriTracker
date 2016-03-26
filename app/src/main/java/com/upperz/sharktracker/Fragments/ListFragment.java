@@ -7,19 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.parse.ParseObject;
-import com.upperz.sharktracker.Activities.SharkActivity;
-import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
-import com.upperz.sharktracker.RecyclerItemClickListener;
 import com.upperz.sharktracker.SharkAdapter;
 
 import org.joda.time.DateTime;
@@ -28,7 +22,6 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Collections;
 import java.util.Comparator;
 
 
@@ -54,6 +47,7 @@ public class ListFragment extends Fragment
 
         View v =inflater.inflate(R.layout.fragment_animal_list,container,false);
 
+        /*
 
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
@@ -89,6 +83,7 @@ public class ListFragment extends Fragment
 
 
 
+*/
         return v;
     }
 

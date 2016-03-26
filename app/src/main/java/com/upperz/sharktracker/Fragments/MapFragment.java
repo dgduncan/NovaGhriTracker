@@ -1,6 +1,7 @@
 package com.upperz.sharktracker.Fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter, GoogleMap.OnMapLoadedCallback {
 
     public List<Marker> markerList = new ArrayList<>();
     public List<Polyline> mPolyLines = new ArrayList<>();
@@ -60,6 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public TextView nameView;
     public TextView sponsorView;
 
+    public ProgressDialog progressDialog;
     public SweetAlertDialog mDialog;
 
     @Override
@@ -83,6 +85,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading Map");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         /*Return the view to be loaded*/
         return v;
@@ -405,17 +413,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLoadedCallback(this);
         googleMap.setInfoWindowAdapter(this);
         googleMap.setOnInfoWindowClickListener(this);
 
         map = googleMap;
 
         /*Add all the animals to the map*/
-        for (String animalName : MyApplication.animals.keySet()) {
+        //for (String animalName : MyApplication.animals.keySet()) {
 
-            markerList.add(map.addMarker(MyApplication.animals.get(animalName).latestLocation));
+          //  markerList.add(map.addMarker(MyApplication.animals.get(animalName).latestLocation));
 
-        }
+        //}
 
     }
 
@@ -483,5 +492,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
         return true;
+    }
+
+    @Override
+    public void onMapLoaded() {
+        progressDialog.dismiss();
+
     }
 }

@@ -8,18 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.upperz.sharktracker.Classes.Animal;
-import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
-
-import java.util.List;
 
 public class SharkActivity extends AppCompatActivity {
 
@@ -46,9 +36,9 @@ public class SharkActivity extends AppCompatActivity {
         });
 
 
-        updateViews();
-        getDistanceTraveled();
-        updatePicture();
+        //updateViews();
+        //getDistanceTraveled();
+        //updatePicture();
 
 
     }
@@ -70,6 +60,7 @@ public class SharkActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     public void updateViews()
     {
         Animal animal = MyApplication.animals.get(getIntent().getStringExtra("name"));
@@ -190,5 +181,5 @@ public class SharkActivity extends AppCompatActivity {
                 animalImage.setImageResource(R.drawable.whitemarlin_1);
 
         }
-    }
+    }*/
 }

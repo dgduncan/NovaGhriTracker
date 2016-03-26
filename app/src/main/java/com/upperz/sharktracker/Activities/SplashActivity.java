@@ -2,11 +2,13 @@ package com.upperz.sharktracker.Activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.dgduncan.myapplication.backend.myApi.MyApi;
 import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
@@ -113,7 +115,7 @@ public class SplashActivity extends AppCompatActivity
             if(myApiService == null)
             {
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://learned-iridium-124717.appspot.com/_ah/api/");
+                        .setRootUrl("https://sharktracker-1142.appspot.com/_ah/api/");
 
                 myApiService = builder.build();
             }
@@ -133,12 +135,14 @@ public class SplashActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(AnimalCollection result) {
+        protected void onPostExecute(AnimalCollection result)
+        {
             progressDialog.dismiss();
 
-            //Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
-            //startActivity(intent);
-            //finish();
+            Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
+
 }
