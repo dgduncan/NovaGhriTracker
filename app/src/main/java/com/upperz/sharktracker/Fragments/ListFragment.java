@@ -31,6 +31,11 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 
+/***
+ * Written by: Derek Duncan
+ * Date: November 2015
+ */
+
 
 public class ListFragment extends Fragment
 {
