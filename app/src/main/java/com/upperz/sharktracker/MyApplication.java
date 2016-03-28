@@ -3,7 +3,6 @@ package com.upperz.sharktracker;
 import android.app.Application;
 
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
-import com.parse.Parse;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -32,9 +31,6 @@ public class MyApplication extends Application
         /*Initiate Joda Time*/
         JodaTimeAndroid.init(this);
 
-        /*Initialize Parse for use*/
-        Parse.initialize(this, "IwtHq5dLlt0Wasp3tQ78g9sSeBFItdOQomd5BGb5",
-                "cdX1CgLdRYRRPBBUX6jYMFscjaq6Myxc1fn47Z0l");
 
         /*Create data map to be use for shark sponsors*/
         createSharkSponsorMap();

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.parse.ParseObject;
+import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -21,11 +21,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ParseObject> items;
+    private List<Animal> items;
 
 
 
-    public class WorkoutViewHolder extends SwipeToAction.ViewHolder<ParseObject>
+    public class WorkoutViewHolder extends SwipeToAction.ViewHolder<Animal>
     {
         public CircleImageView mProfilePic;
         public TextView timeSinceUpdatedView;
@@ -41,7 +41,7 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public SharkAdapter(List<ParseObject> items)
+    public SharkAdapter(List<Animal> items)
     {
         this.items = items;
     }
@@ -71,24 +71,24 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        ParseObject item = items.get(position);
+        Animal item = items.get(position);
 
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
-        DateTime dt = formatter.parseDateTime(item.getString("date"));
+        DateTime dt = formatter.parseDateTime(item.getDate());
 
         int recenttest = (Days.daysBetween(dt, new LocalDateTime().toDateTime()).getDays());
 
         WorkoutViewHolder vh = (WorkoutViewHolder) holder;
 
         vh.timeSinceUpdatedView.setText(String.valueOf(recenttest) + " Days Ago");
-        vh.sharkView.setText(item.getString("shark"));
+        vh.sharkView.setText(item.getName());
         loadApproptiateImage(vh, item);
         vh.data = item;
     }
 
-    public void loadApproptiateImage(WorkoutViewHolder x, ParseObject item)
+    public void loadApproptiateImage(WorkoutViewHolder x, Animal item)
     {
-        switch(item.getString("project"))
+        switch(item.getCommonName())
         {
             case "bluemarlin":
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);

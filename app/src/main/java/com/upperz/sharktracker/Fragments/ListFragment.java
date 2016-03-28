@@ -7,13 +7,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.parse.ParseObject;
+import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.upperz.sharktracker.Activities.SharkActivity;
+import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
+import com.upperz.sharktracker.RecyclerItemClickListener;
 import com.upperz.sharktracker.SharkAdapter;
 
 import org.joda.time.DateTime;
@@ -22,19 +28,18 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Collections;
 import java.util.Comparator;
 
 
 public class ListFragment extends Fragment
 {
 
-    int recenttest1;
-    int recenttest2;
+
 
     public String trackName;
 
-    DateTime dt1;
-    DateTime dt2;
+
     DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 
 
@@ -47,7 +52,7 @@ public class ListFragment extends Fragment
 
         View v =inflater.inflate(R.layout.fragment_animal_list,container,false);
 
-        /*
+
 
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
@@ -83,7 +88,7 @@ public class ListFragment extends Fragment
 
 
 
-*/
+
         return v;
     }
 
@@ -102,18 +107,21 @@ public class ListFragment extends Fragment
         }
     }
 
-    public class CustomComparator implements Comparator<ParseObject> {
+    /***
+     * Custom comparator used to make sure that the sharks are sorted in order of increasing
+     * time since last update in the recycler view
+     */
+    public class CustomComparator implements Comparator<Animal> {
         @Override
-        public int compare(ParseObject o1, ParseObject o2)
+        public int compare(Animal o1, Animal o2)
         {
+            DateTime dt1 = formatter.parseDateTime(o1.getDate());
+            DateTime dt2 = formatter.parseDateTime(o2.getDate());
 
-            dt1 = formatter.parseDateTime(o1.getString("date"));
-            dt2 = formatter.parseDateTime(o2.getString("date"));
+            int recentTest1 = (Days.daysBetween(dt1, new LocalDateTime().toDateTime()).getDays());
+            int recentTest2 = (Days.daysBetween(dt2, new LocalDateTime().toDateTime()).getDays());
 
-            recenttest1 = (Days.daysBetween(dt1, new LocalDateTime().toDateTime()).getDays());
-            recenttest2 = (Days.daysBetween(dt2, new LocalDateTime().toDateTime()).getDays());
-
-            return recenttest1 - recenttest2;
+            return recentTest1 - recentTest2;
         }
     }
 
