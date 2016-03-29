@@ -43,8 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter, GoogleMap.OnMapLoadedCallback {
 
     public List<Marker> markerList = new ArrayList<>();
@@ -66,12 +64,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public TextView sponsorView;
 
     public ProgressDialog progressDialog;
-    public SweetAlertDialog mDialog;
+
 
     @Override
     public void onCreate(Bundle SavedInstanceState)
     {
         super.onCreate(SavedInstanceState);
+
     }
 
     @Override
@@ -317,6 +316,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onResume() {
         mapView.onResume();
+
         super.onResume();
     }
 
@@ -405,6 +405,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
+
 
         zoomOutAndReload();
 

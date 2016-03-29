@@ -3,6 +3,8 @@ package com.upperz.sharktracker;
 import android.app.Application;
 
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -16,11 +18,12 @@ public class MyApplication extends Application
 {
 
     public static HashMap<String, Animal> animals = new HashMap<>();
-    public final static HashMap<String, Object> sharkTrackParams = new HashMap<>();
     public static List<Animal> sharks = new ArrayList<>();
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
     public static String mCurrentSharkSelected;
+
+    private Tracker mTracker;
 
 
 
@@ -90,5 +93,18 @@ public class MyApplication extends Application
 
         }
 
+    }
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 }
