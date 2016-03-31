@@ -70,12 +70,14 @@ public class AnimalUpdateRegular extends HttpServlet
     private int taggingVideoIndex;
 
 
-    private String root = "http://cnso.nova.edu/sharktracking/sharkmap/controlfiles/";
-
-
-
+    /***
+     * BufferedReader from CSVReader library used to stream CSV data
+     */
     private BufferedReader in;
 
+    /***
+     * CSVReader that actually parses the stream from BufferedReader
+     */
     private CSVReader reader;
 
     /***
@@ -90,6 +92,8 @@ public class AnimalUpdateRegular extends HttpServlet
             throws IOException
     {
 
+        //TODO : Will updating the animals instead of creating new entities be too costly for reads?
+        /*Deletes all animals from the data store*/
         deleteAllAnimals();
 
         for(String csvBranch : branchList)
@@ -153,6 +157,7 @@ public class AnimalUpdateRegular extends HttpServlet
 
         try
         {
+            String root = "http://cnso.nova.edu/sharktracking/sharkmap/controlfiles/";
             stockURL = new URL(root + csvBranch);
         }
         catch (MalformedURLException e)
@@ -241,6 +246,10 @@ public class AnimalUpdateRegular extends HttpServlet
             initialDate = initialDate.substring(0, initialDate.indexOf(' '));
         }
 
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
+        DateTime initialDateTime = dateTimeFormat.parseDateTime(initialDate);
+        DateTime currentDateTime = dateTimeFormat.parseDateTime(date);
+
         String sex;
 
         if(x[sexIndex].equals(""))
@@ -274,13 +283,6 @@ public class AnimalUpdateRegular extends HttpServlet
         {
             tagging_video = beginning[taggingVideoIndex];
         }
-
-        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
-        DateTime initialDateTime = dateTimeFormat.parseDateTime(initialDate);
-        DateTime currentDateTime = dateTimeFormat.parseDateTime(date);
-
-
-
 
 
 
@@ -320,7 +322,8 @@ public class AnimalUpdateRegular extends HttpServlet
 
     }
 
-    private boolean checkIfRecent(String date) {
+    private boolean checkIfRecent(String date)
+    {
 
         DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
         DateTime dateTime = dateTimeFormat.parseDateTime(date);

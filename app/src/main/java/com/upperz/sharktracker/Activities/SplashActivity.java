@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.dgduncan.myapplication.backend.myApi.MyApi;
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.upperz.sharktracker.MyApplication;
@@ -25,20 +24,8 @@ public class SplashActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*Must initialize this first in order to create marker options*/
-        MapsInitializer.initialize(getApplicationContext());
-
+        
         /*Query GAE to get latest locations*/
-        queryAnimals();
-    }
-
-    /***
-     * Function used to query GAE for the latest locations and to create animal objects
-     * from the returned query data.
-     */
-    private void queryAnimals()
-    {
         new EndpointsAsyncTask().execute();
     }
 
@@ -62,8 +49,9 @@ public class SplashActivity extends AppCompatActivity
         @Override
         protected void onPreExecute()
         {
+
             progressDialog = new ProgressDialog(SplashActivity.this);
-            progressDialog.setMessage("Loading Animal ... ");
+            progressDialog.setMessage("Loading Animal Locations ... ");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -79,7 +67,7 @@ public class SplashActivity extends AppCompatActivity
                 @Override
                 public void onFinish()
                 {
-                    /*Check if AsyncTask is actually still runnning*/
+                    /*Check if AsyncTask is actually still running*/
                     if(endpointsAsyncTask.getStatus() == Status.RUNNING)
                     {
                         //Cancel task if still running
@@ -140,16 +128,35 @@ public class SplashActivity extends AppCompatActivity
         {
             progressDialog.dismiss();
 
-            MyApplication.sharks = result.getItems();
-
-            for(Animal animal : result.getItems())
+            if(result != null)
             {
-                MyApplication.animals.put(animal.getName(), animal);
+                MyApplication.sharks = result.getItems();
+
+                for(Animal animal : result.getItems())
+                {
+                    MyApplication.animals.put(animal.getName(), animal);
+                }
+
+                Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+                startActivity(intent);
+                finish();
             }
 
-            Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
-            startActivity(intent);
-            finish();
+            else
+            {
+                new AlertDialog.Builder(SplashActivity.this)
+                        .setTitle("Connection Error")
+                        .setMessage("There seems to be an issue connecting to our backend," +
+                                " please check your internet connection and try again?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
         }
     }
 

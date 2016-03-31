@@ -80,7 +80,7 @@ public class SharkActivity extends AppCompatActivity {
 
         name.setText(animal.getName());
         date.setText(animal.getDate());
-        days.setText(String.valueOf(animal.getSequence()));
+        days.setText(String.valueOf(animal.getDaysTracked()));
         sex.setText(animal.getSex());
         species.setText(animal.getSpecies());
         latitude.setText(String.valueOf(animal.getCurrentLocation().getLatitude()));
