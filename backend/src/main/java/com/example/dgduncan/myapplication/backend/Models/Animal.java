@@ -15,6 +15,8 @@ public class Animal{
 
     public String date;
 
+    public int days_tracked;
+
     public GeoPt initialLocation;
 
     public GeoPt currentLocation;
@@ -37,11 +39,12 @@ public class Animal{
 
     public Animal(){}
 
-    public Animal(String common_name, String date,  GeoPt initialLocation, GeoPt currentLocation,  String name, boolean recent, Integer sequence,
+    public Animal(String common_name, String date, int days_tracked,  GeoPt initialLocation, GeoPt currentLocation,  String name, boolean recent, Integer sequence,
                   String sex, String size, String species, String tagging_video)
     {
         this.common_name = common_name;
         this.date = date;
+        this.days_tracked = days_tracked;
         this.initialLocation = initialLocation;
         this.currentLocation = currentLocation;
         this.name = name;

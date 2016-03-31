@@ -229,10 +229,16 @@ public class AnimalUpdateRegular extends HttpServlet
     private void buildEntity(String[] beginning, String[] first, String[] x)
     {
         String date = x[dateIndex];
+        String initialDate = first[dateIndex];
 
         if((date.indexOf(' ')) != -1)
         {
             date = date.substring(0, date.indexOf(' '));
+        }
+
+        if((initialDate.indexOf(' ')) != -1)
+        {
+            initialDate = initialDate.substring(0, initialDate.indexOf(' '));
         }
 
         String sex;
@@ -269,9 +275,22 @@ public class AnimalUpdateRegular extends HttpServlet
             tagging_video = beginning[taggingVideoIndex];
         }
 
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
+        DateTime initialDateTime = dateTimeFormat.parseDateTime(initialDate);
+        DateTime currentDateTime = dateTimeFormat.parseDateTime(date);
+
+
+
+
+
+
+
+
+
         Animal animal = new Animal(
                 beginning[commonNameIndex],
                 date,
+                Days.daysBetween(initialDateTime, currentDateTime).getDays(),
                 new GeoPt(Float.valueOf(first[latitudeIndex]), Float.valueOf(first[longitudeIndex])),
                 new GeoPt(Float.valueOf(x[latitudeIndex]), Float.valueOf(x[longitudeIndex])),
                 x[nameIndex],

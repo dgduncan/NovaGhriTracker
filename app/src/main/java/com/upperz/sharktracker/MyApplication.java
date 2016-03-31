@@ -18,7 +18,7 @@ public class MyApplication extends Application
     public static HashMap<String, Animal> animals = new HashMap<>();
 
     public static List<Animal> sharks = new ArrayList<>();
-    
+
     public final static Map<String, String> sharkSponsors = new HashMap<>();
 
     public static String mCurrentSharkSelected;

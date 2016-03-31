@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/cron/trackupdateregular</url>
+        <description>Update for new tracks</description>
+        <schedule>every day 5:30</schedule>
+        <timezone>America/New_York</timezone>
+        <retry-parameters>
+            <min-backoff-seconds>30</min-backoff-seconds>
+            <max-doublings>5</max-doublings>
+        </retry-parameters>
+    </cron>
+    <cron>
+        <url>/cron/animalupdateregular</url>
+        <description>Update for latest on sharks</description>
+        <schedule>every day 7:00</schedule>
+        <timezone>America/New_York</timezone>
+        <retry-parameters>
+            <min-backoff-seconds>30</min-backoff-seconds>
+            <max-doublings>5</max-doublings>
+        </retry-parameters>
+    </cron>
+</cronentries>
