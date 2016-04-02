@@ -58,16 +58,12 @@ public class MainTabbedActivity extends AppCompatActivity {
 
                 if (position == 0)
                 {
-                    mf.createSnackBar();
                     if(lf.trackName != null)
                     {
                         mf.createTrackFromTabber(lf.trackName);
                         lf.trackName = null;
                     }
                 }
-                else
-                    mf.closeSnackBar();
-
             }
 
             @Override

@@ -24,13 +24,12 @@ public class SplashActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         /*Query GAE to get latest locations*/
         new EndpointsAsyncTask().execute();
     }
 
-
-    /***
+    /**
      * Async task that creates a reference to my AnimalApi, queries for the latest locations, and
      * stores this data as a global variable
      */
@@ -50,8 +49,9 @@ public class SplashActivity extends AppCompatActivity
         protected void onPreExecute()
         {
 
+            /*Create progress dialog to notify user that application is loading*/
             progressDialog = new ProgressDialog(SplashActivity.this);
-            progressDialog.setMessage("Loading Animal Locations ... ");
+            progressDialog.setMessage("Loading animal locations ... ");
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -147,7 +147,7 @@ public class SplashActivity extends AppCompatActivity
                 new AlertDialog.Builder(SplashActivity.this)
                         .setTitle("Connection Error")
                         .setMessage("There seems to be an issue connecting to our backend," +
-                                " please check your internet connection and try again?")
+                                " please check your internet connection and try again.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 finish();

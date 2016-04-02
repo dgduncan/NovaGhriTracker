@@ -39,6 +39,7 @@ dependencies {
 
 
     /*Github Libraries*/
+    compile 'com.cocosw:bottomsheet:1.+@aar'
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'co.dift.ui.swipetoaction:library:1.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'

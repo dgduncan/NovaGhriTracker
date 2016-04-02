@@ -34,7 +34,7 @@ import static com.example.dgduncan.myapplication.backend.OfyHelper.ofy;
 public class AnimalUpdateRegular extends HttpServlet
 {
 
-    /***
+    /**
      * ArrayList containing the "branches" contianing the CSV files
      */
     private ArrayList<String> branchList = new ArrayList<>(Arrays.asList(
@@ -127,29 +127,6 @@ public class AnimalUpdateRegular extends HttpServlet
 
     }
 
-    private void getCsvIndexes(String[] metaData)
-    {
-        List<String> metaDataArray = Arrays.asList(metaData);
-
-        commonNameIndex = metaDataArray.indexOf("commonname");
-
-        dateIndex = metaDataArray.indexOf("date");
-
-        latitudeIndex = metaDataArray.indexOf("latitude");
-
-        longitudeIndex = metaDataArray.indexOf("longitude");
-
-        nameIndex = metaDataArray.indexOf("shark");
-
-        sexIndex = metaDataArray.indexOf("sex");
-
-        sizeIndex = metaDataArray.indexOf("size");
-
-        speciesIndex = metaDataArray.indexOf("species");
-
-        taggingVideoIndex = metaDataArray.indexOf("taggingvideo");
-
-    }
 
     private void buildCSVReader(String csvBranch)
     {
@@ -186,50 +163,6 @@ public class AnimalUpdateRegular extends HttpServlet
 
 
     }
-
-    private void splitIntoSharkArrays(ArrayList<String[]> x)
-    {
-        String currentShark = x.get(0)[nameIndex];
-
-        ArrayList<String[]> currentSharkArray = new ArrayList<>();
-
-        for(String[] currentRow : x)
-        {
-            if(currentRow[nameIndex].equals(currentShark))
-            {
-                currentSharkArray.add(currentRow);
-
-            }
-
-            else
-            {
-                sharkLists.add(currentSharkArray);
-
-                currentSharkArray = new ArrayList<>();
-
-                currentShark = currentRow[nameIndex];
-
-                currentSharkArray.add(currentRow);
-            }
-        }
-
-        sharkLists.add(currentSharkArray);
-
-
-
-        //currentSharkArray.clear();
-
-    }
-
-    public class CustomComparator implements Comparator<String[]>
-    {
-        @Override
-        public int compare(String[] o1, String[] o2)
-        {
-            return Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]);
-        }
-    }
-
 
     private void buildEntity(String[] beginning, String[] first, String[] x)
     {
@@ -309,6 +242,15 @@ public class AnimalUpdateRegular extends HttpServlet
 
     }
 
+    private boolean checkIfRecent(String date)
+    {
+
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
+        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+
+        return Days.daysBetween(dateTime, new LocalDateTime().toDateTime()).getDays() <= 14;
+
+    }
     private void deleteAllAnimals()
     {
 
@@ -322,14 +264,79 @@ public class AnimalUpdateRegular extends HttpServlet
 
     }
 
-    private boolean checkIfRecent(String date)
+
+    private void getCsvIndexes(String[] metaData)
     {
+        List<String> metaDataArray = Arrays.asList(metaData);
 
-        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
-        DateTime dateTime = dateTimeFormat.parseDateTime(date);
+        commonNameIndex = metaDataArray.indexOf("commonname");
 
-        return Days.daysBetween(dateTime, new LocalDateTime().toDateTime()).getDays() <= 14;
+        dateIndex = metaDataArray.indexOf("date");
 
+        latitudeIndex = metaDataArray.indexOf("latitude");
+
+        longitudeIndex = metaDataArray.indexOf("longitude");
+
+        nameIndex = metaDataArray.indexOf("shark");
+
+        sexIndex = metaDataArray.indexOf("sex");
+
+        sizeIndex = metaDataArray.indexOf("size");
+
+        speciesIndex = metaDataArray.indexOf("species");
+
+        taggingVideoIndex = metaDataArray.indexOf("taggingvideo");
+
+    }
+
+    private void splitIntoSharkArrays(ArrayList<String[]> x)
+    {
+        String currentShark = x.get(0)[nameIndex];
+
+        ArrayList<String[]> currentSharkArray = new ArrayList<>();
+
+        for(String[] currentRow : x)
+        {
+            if(currentRow[nameIndex].equals(currentShark))
+            {
+                currentSharkArray.add(currentRow);
+
+            }
+
+            else
+            {
+                sharkLists.add(currentSharkArray);
+
+                currentSharkArray = new ArrayList<>();
+
+                currentShark = currentRow[nameIndex];
+
+                currentSharkArray.add(currentRow);
+            }
+        }
+
+        sharkLists.add(currentSharkArray);
+
+
+
+        //currentSharkArray.clear();
+
+    }
+
+
+
+
+
+
+
+
+    public class CustomComparator implements Comparator<String[]>
+    {
+        @Override
+        public int compare(String[] o1, String[] o2)
+        {
+            return Integer.parseInt(o1[0]) - Integer.parseInt(o2[0]);
+        }
     }
 }
 
