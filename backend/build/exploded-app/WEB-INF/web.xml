@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+   <servlet>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+        <init-param>
+            <param-name>services</param-name>
+            <param-value>com.example.dgduncan.myapplication.backend.Endpoints.AnimalEndpoint,
+            com.example.dgduncan.myapplication.backend.Endpoints.TrackEndpoint</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>AnimalUpdateRegular</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.AnimalUpdateRegular</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AnimalUpdateRegular</servlet-name>
+        <url-pattern>/cron/animalupdateregular</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TrackUpdateFull</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdateFull</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrackUpdateFull</servlet-name>
+        <url-pattern>/cron/trackupdatefull</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TrackUpdateRegular</servlet-name>
+        <servlet-class>com.example.dgduncan.myapplication.backend.Cron.TrackUpdateRegular</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrackUpdateRegular</servlet-name>
+        <url-pattern>/cron/trackupdateregular</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>cron</web-resource-name>
+            <url-pattern>/cron/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+</web-app>

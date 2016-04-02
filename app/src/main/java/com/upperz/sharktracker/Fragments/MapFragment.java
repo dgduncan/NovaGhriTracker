@@ -82,17 +82,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
-    public void createTrackFromTabber(final String name)
-    {
-        new EndpointsAsyncTask().execute(name);
-
-        mapHelper.createSharkTrackFromTabber(name);
-
-
-
-    }
-
-
     @Override
     public View getInfoWindow(Marker marker) {
         return null;

@@ -22,7 +22,6 @@ import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainTabbedActivity extends AppCompatActivity {
 
-
     public MapFragment mf;
     public ListFragment lf;
     public SponsorFragment sf;
@@ -60,7 +59,7 @@ public class MainTabbedActivity extends AppCompatActivity {
                 {
                     if(lf.trackName != null)
                     {
-                        mf.createTrackFromTabber(lf.trackName);
+                        mf.createSharkTrack(lf.trackName);
                         lf.trackName = null;
                     }
                 }

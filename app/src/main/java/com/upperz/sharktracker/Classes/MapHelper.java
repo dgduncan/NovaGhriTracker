@@ -24,7 +24,7 @@ import java.util.List;
 public class MapHelper
 {
     private List<Marker> markerList = new ArrayList<>();
-    private List<Polyline> mPolyLines = new ArrayList<>();
+    private List<Polyline> polyLines = new ArrayList<>();
 
     /*Map States*/
     public boolean trackShown;
@@ -74,23 +74,26 @@ public class MapHelper
 
     public void createSharkTrack(String name, ArrayList<LatLng> mLatLngs)
     {
+        /*Set flag to true to stop onClick for shown marker*/
         trackShown = true;
 
+        /*If there is a marker currently shown from previous track, remove it*/
         if(temporaryStartMarker != null)
             temporaryStartMarker.remove();
+        if(currentMarkerSelected!= null)
+        {
+            if(currentMarkerSelected.isInfoWindowShown())
+                currentMarkerSelected.hideInfoWindow();
+        }
+        //*********************************************************************
 
-        if(currentMarkerSelected.isInfoWindowShown())
-            currentMarkerSelected.hideInfoWindow();
-
-        //f(currentMarkerSelected != null)
-        //    currentMarkerSelected.remove();
-
-        for(Polyline p : mPolyLines)
+        /*Remove all polyLines*/
+        for(Polyline p : polyLines)
         {
             p.remove();
         }
 
-
+        /*Hide all markers except for the one currently selected*/
         for(Marker m : markerList)
         {
             if(m.getTitle().equals(name))
@@ -104,9 +107,11 @@ public class MapHelper
             }
         }
 
+        /*Create an initial map marker for the animal whose track is shown*/
         buildMarker(MyApplication.animals.get(name), true);
 
-        mPolyLines.add(googleMap.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
+        /*Add polyLines to the array list*/
+        polyLines.add(googleMap.addPolyline(new PolylineOptions().width(5).geodesic(true).color(Color.RED).addAll(mLatLngs)));
 
 
     }
@@ -121,7 +126,7 @@ public class MapHelper
         if(currentMarkerSelected != null)
             currentMarkerSelected.remove();
 
-        for(Polyline p : mPolyLines)
+        for(Polyline p : polyLines)
         {
             p.remove();
         }
@@ -207,9 +212,9 @@ public class MapHelper
         for (Marker m : markerList)
             m.setVisible(true);
 
-        for (Polyline polyline : mPolyLines) {
+        for (Polyline polyline : polyLines) {
             polyline.remove();}
-        mPolyLines.clear();
+        polyLines.clear();
 
         googleMap.animateCamera(CameraUpdateFactory.zoomBy(-1));
     }
