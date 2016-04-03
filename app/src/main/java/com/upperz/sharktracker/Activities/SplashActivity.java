@@ -57,10 +57,11 @@ public class SplashActivity extends AppCompatActivity
             progressDialog.show();
 
 
+            /*CountDownTimer to prevent the request from running for ever*/
             new CountDownTimer(15000, 15000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    //Empty on purpose
+                    //TODO : Add onTick code to tell user what is going on
 
                 }
 
@@ -126,24 +127,32 @@ public class SplashActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(AnimalCollection result)
         {
-            progressDialog.dismiss();
-
+            /*Check if result is null to catch any network error*/
             if(result != null)
             {
+                //TODO : I don't like the way that this is done
                 MyApplication.sharks = result.getItems();
 
+                /*Put animal references into the MyApplication*/
                 for(Animal animal : result.getItems())
                 {
                     MyApplication.animals.put(animal.getName(), animal);
                 }
 
+                /*Dismiss the dialog to tell user that everything is done*/
+                progressDialog.dismiss();
+
+                /*Start the activity to go to the tabbed activity*/
                 Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
                 startActivity(intent);
+
+                /*finish() prevents the user from being able to back press back into the splash*/
                 finish();
             }
 
             else
             {
+                /*Build an Alert Dialog to tell user that a network has occured*/
                 new AlertDialog.Builder(SplashActivity.this)
                         .setTitle("Connection Error")
                         .setMessage("There seems to be an issue connecting to our backend," +
@@ -156,8 +165,6 @@ public class SplashActivity extends AppCompatActivity
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
-
         }
     }
-
 }

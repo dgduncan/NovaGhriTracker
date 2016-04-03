@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.upperz.sharktracker.Fragments.YoutubeFragment;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
@@ -44,6 +45,9 @@ public class SharkActivity extends AppCompatActivity {
         //getDistanceTraveled();
         updatePicture();
 
+        YoutubeFragment f = YoutubeFragment.newInstance("Ci6g-Fik0Mw");
+        getSupportFragmentManager().beginTransaction().replace(R.id.youtubecontainer, f).commit();
+
 
     }
 
@@ -69,6 +73,7 @@ public class SharkActivity extends AppCompatActivity {
     {
         Animal animal = MyApplication.animals.get(getIntent().getStringExtra("name"));
 
+        TextView commonName = (TextView)findViewById(R.id.commonName);
         TextView sex = (TextView)findViewById(R.id.sex);
         TextView latitude = (TextView)findViewById(R.id.latitude);
         TextView longitude = (TextView)findViewById(R.id.longitude);
@@ -78,6 +83,7 @@ public class SharkActivity extends AppCompatActivity {
         TextView species = (TextView)findViewById(R.id.species);
 
 
+        commonName.setText(animal.getCommonName());
         name.setText(animal.getName());
         date.setText(animal.getDate());
         days.setText(String.valueOf(animal.getDaysTracked()));

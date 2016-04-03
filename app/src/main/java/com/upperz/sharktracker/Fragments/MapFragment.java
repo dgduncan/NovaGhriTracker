@@ -39,18 +39,17 @@ import java.util.Arrays;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter, GoogleMap.OnMapLoadedCallback {
 
+    public MapHelper mapHelper;
+
     public MapView mapView;
+
+    public ProgressDialog progressDialog;
+
+    public TextView commonView;
     public TextView latitudeView;
     public TextView longitudeView;
     public TextView nameView;
     public TextView sponsorView;
-
-    public ProgressDialog progressDialog;
-
-    public MapHelper mapHelper;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,6 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         View v = View.inflate(getContext(), R.layout.custom_info_window, null);
         v.findViewById(R.id.sponsor_layout).setVisibility(View.GONE);
 
+        commonView = (TextView) v.findViewById(R.id.common_name_info_window);
         nameView = (TextView) v.findViewById(R.id.name);
         latitudeView = (TextView) v.findViewById(R.id.date_info_window);
         longitudeView = (TextView) v.findViewById(R.id.species_info_window);
@@ -102,6 +102,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             if (animal.getName().equals(marker.getTitle()))
             {
+                commonView.setText(animal.getCommonName());
                 nameView.setText(animal.getName());
                 latitudeView.setText(animal.getDate());
                 longitudeView.setText(animal.getSpecies());
@@ -148,7 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        mapHelper.resetView();
+        mapHelper.updateUI(0, 0, null);
     }
 
     @Override
@@ -346,13 +347,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         @Override
         protected void onPostExecute(TrackCollection result)
         {
+            /*Create an Array List of Latitudes and Longitudes*/
             ArrayList<LatLng> mLatLngs = new ArrayList<>();
 
+            /*Create add all the latitudes and longitudes*/
             for (Track track : result.getItems())
                 mLatLngs.add(new LatLng(track.getLocation().getLatitude(), track.getLocation().getLongitude()));
 
+            /*Create the shark track using the mapHelper*/
             mapHelper.createSharkTrack(name, mLatLngs);
 
+            /*Dismiss dialog*/
             progressDialog.dismiss();
 
 
