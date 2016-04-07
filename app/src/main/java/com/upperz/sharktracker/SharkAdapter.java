@@ -90,10 +90,10 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     {
         switch(item.getCommonName())
         {
-            case "bluemarlin":
+            case "Blue Marlin":
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);
                 break;
-            case "caribbeanmakosharks":
+            case "Mako Shark":
                 x.mProfilePic.setImageResource(R.drawable.mako_awesome_image);
                 break;
             case "enpmakosharks":
@@ -105,16 +105,16 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case "makosharksmexico":
                 x.mProfilePic.setImageResource(R.drawable.mako_mexico);
                 break;
-            case "owtsharks":
+            case "Oceanic Whitetip Shark":
                 x.mProfilePic.setImageResource(R.drawable.owt_orig);
                 break;
             case "sailfish":
                 x.mProfilePic.setImageResource(R.drawable.sailfish3);
                 break;
-            case "sandtiger":
+            case "Sand Tiger Shark":
                 x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
-            case "tigerbermuda2009":
+            case "Tiger Shark":
                 x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
             case "tigerbermuda2010":
@@ -132,7 +132,7 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case "tigerwesternaustralia":
                 x.mProfilePic.setImageResource(R.drawable.tiger_image);
                 break;
-            case "whitemarlin":
+            case "White Marlin":
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);
                 break;
             case "islamakorace":

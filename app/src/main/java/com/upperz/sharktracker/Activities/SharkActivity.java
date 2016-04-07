@@ -30,23 +30,31 @@ public class SharkActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("trackName", getIntent().getStringExtra("name"));
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
-        });
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.putExtra("trackName", getIntent().getStringExtra("name"));
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
 
 
         updateViews();
         //getDistanceTraveled();
         updatePicture();
 
-        YoutubeFragment f = YoutubeFragment.newInstance("Ci6g-Fik0Mw");
-        getSupportFragmentManager().beginTransaction().replace(R.id.youtubecontainer, f).commit();
+
+
+        if(!MyApplication.animals.get(getIntent().getStringExtra("name")).getTaggingVideo().equals("unknown"))
+        {
+            YoutubeFragment f = YoutubeFragment.newInstance("UlYM1pOSfos");
+            getSupportFragmentManager().beginTransaction().replace(R.id.youtubeContainer, f).commit();
+        }
+
 
 
     }
@@ -82,18 +90,35 @@ public class SharkActivity extends AppCompatActivity {
         TextView name = (TextView)findViewById(R.id.name);
         TextView species = (TextView)findViewById(R.id.species);
 
+        if (commonName != null) {
+            commonName.setText(animal.getCommonName());
+        }
+        if (name != null) {
+            name.setText(animal.getName());
+        }
+        if (date != null) {
+            date.setText(animal.getDate());
+        }
+        if (days != null) {
+            days.setText(String.valueOf(animal.getDaysTracked()));
+        }
+        if (sex != null) {
+            sex.setText(animal.getSex());
+        }
+        if (species != null) {
+            species.setText(animal.getSpecies());
+        }
+        if (latitude != null) {
+            latitude.setText(String.valueOf(animal.getCurrentLocation().getLatitude()));
+        }
+        if (longitude != null) {
+            longitude.setText(String.valueOf(animal.getCurrentLocation().getLongitude()));
+        }
 
-        commonName.setText(animal.getCommonName());
-        name.setText(animal.getName());
-        date.setText(animal.getDate());
-        days.setText(String.valueOf(animal.getDaysTracked()));
-        sex.setText(animal.getSex());
-        species.setText(animal.getSpecies());
-        latitude.setText(String.valueOf(animal.getCurrentLocation().getLatitude()));
-        longitude.setText(String.valueOf(animal.getCurrentLocation().getLongitude()));
 
     }
 
+    /*
     public static float distFrom(double lat1, double lng1, double lat2, double lng2)
     {
         double earthRadius = 6371000;
@@ -105,7 +130,7 @@ public class SharkActivity extends AppCompatActivity {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
         return (float) (earthRadius * c);
-    }
+    }*/
 
     /*
     public void getDistanceTraveled()

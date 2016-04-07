@@ -16,4 +16,8 @@
         android:title="@string/menu_help"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_help_100"/>
+    <item android:id="@+id/about_button"
+        android:orderInCategory="300"
+        android:title="About this Application"
+        app:showAsAction="never"/>
 </menu>

@@ -1,5 +1,6 @@
 package com.upperz.sharktracker.Activities;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -7,12 +8,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.InterstitialAd;
 import com.upperz.sharktracker.Fragments.ListFragment;
 import com.upperz.sharktracker.Fragments.MapFragment;
 import com.upperz.sharktracker.Fragments.SponsorFragment;
@@ -21,6 +25,7 @@ import com.upperz.sharktracker.R;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainTabbedActivity extends AppCompatActivity {
+
 
     public MapFragment mf;
     public ListFragment lf;
@@ -55,10 +60,8 @@ public class MainTabbedActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                if (position == 0)
-                {
-                    if(lf.trackName != null)
-                    {
+                if (position == 0) {
+                    if (lf.trackName != null) {
                         mf.createSharkTrack(lf.trackName);
                         lf.trackName = null;
                     }
@@ -77,6 +80,7 @@ public class MainTabbedActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
 
 
     }
@@ -175,6 +179,22 @@ public class MainTabbedActivity extends AppCompatActivity {
         if (id == R.id.help_button) {
             openHelpDialog();
             return true;
+        }
+
+        if(id == R.id.about_button)
+        {
+            AlertDialog.Builder ad = new AlertDialog.Builder(this);
+            ad.setTitle("About this Application");
+            ad.setView(LayoutInflater.from(this).inflate(R.layout.dialog_about, null));
+            ad.setPositiveButton("OK", new android.content.DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+            ad.show();
+
         }
 
         return super.onOptionsItemSelected(item);
