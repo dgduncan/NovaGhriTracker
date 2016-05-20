@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.ads.InterstitialAd;
 import com.upperz.sharktracker.Fragments.ListFragment;
 import com.upperz.sharktracker.Fragments.MapFragment;
 import com.upperz.sharktracker.Fragments.SponsorFragment;
@@ -25,7 +24,6 @@ import com.upperz.sharktracker.R;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainTabbedActivity extends AppCompatActivity {
-
 
     public MapFragment mf;
     public ListFragment lf;
@@ -37,6 +35,7 @@ public class MainTabbedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tabbed);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,7 +83,6 @@ public class MainTabbedActivity extends AppCompatActivity {
 
 
     }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

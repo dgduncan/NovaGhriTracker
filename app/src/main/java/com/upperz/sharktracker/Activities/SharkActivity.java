@@ -132,34 +132,6 @@ public class SharkActivity extends AppCompatActivity {
         return (float) (earthRadius * c);
     }*/
 
-    /*
-    public void getDistanceTraveled()
-    {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Animals");
-        query.whereEqualTo("shark", getIntent().getStringExtra("name"));
-        query.setLimit(1000);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if(e == null)
-                {
-                    float distance = 0;
-
-                    for(int i = 0; i < list.size()-1; i++)
-                    {
-                        distance = distance + distFrom(Double.valueOf(list.get(i).getString("latitude")),
-                                Double.valueOf(list.get(i).getString("longitude")),
-                                Double.valueOf(list.get(i+1).getString("latitude")),
-                                Double.valueOf(list.get(i+1).getString("longitude")));
-                    }
-
-                    TextView daysTracked = (TextView)findViewById(R.id.daysTracked);
-                    daysTracked.setText(String.valueOf((int) (distance * 0.000621371)));
-                }
-            }
-        });
-    }*/
-
     public void updatePicture()
     {
         ImageView animalImage = (ImageView)findViewById(R.id.toolbarImage);

@@ -2,13 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activities.MainTabbedActivity">
-    <!--<item android:id="@+id/learn_more_button"
-        android:orderInCategory="100"
-        android:title="@string/menu_learn_more"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_classroom_100">
-
-    </item>-->
 
 
     <item android:id="@+id/help_button"

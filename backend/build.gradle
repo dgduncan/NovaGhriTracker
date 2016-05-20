@@ -1,12 +1,15 @@
 // If you would like more information on the gradle-appengine-plugin please refer to the github page
 // https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
 
+
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.google.appengine:gradle-appengine-plugin:1.9.18'
+
     }
 }
 
@@ -28,6 +31,7 @@ dependencies {
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.0.3'
     compile 'com.opencsv:opencsv:3.7'
+    appengineEndpointsGetClientLibs.dependsOn appengineEndpointsGetDiscoveryDocs
 }
 
 appengine {
