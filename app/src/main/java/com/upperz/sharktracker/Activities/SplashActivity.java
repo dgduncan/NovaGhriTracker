@@ -14,6 +14,7 @@ import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.upperz.sharktracker.BottomBar.BottomBar;
 import com.upperz.sharktracker.MyApplication;
 
 import java.io.IOException;
@@ -143,7 +144,7 @@ public class SplashActivity extends AppCompatActivity
                 progressDialog.dismiss();
 
                 /*Start the activity to go to the tabbed activity*/
-                Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+                Intent intent = new Intent(SplashActivity.this, BottomBar.class);
                 startActivity(intent);
 
                 /*finish() prevents the user from being able to back press back into the splash*/
