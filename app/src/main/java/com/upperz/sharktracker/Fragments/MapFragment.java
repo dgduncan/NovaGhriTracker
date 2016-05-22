@@ -20,6 +20,8 @@ import com.example.dgduncan.myapplication.backend.models.trackApi.TrackApi;
 import com.example.dgduncan.myapplication.backend.models.trackApi.model.Track;
 import com.example.dgduncan.myapplication.backend.models.trackApi.model.TrackCollection;
 import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -68,6 +70,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        AdView mAdView = (AdView) v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addTestDevice("41A676209E43D8DDF336A8C419D9C2EA")
+                .build();
+        mAdView.loadAd(adRequest);
 
         /*Return the view to be loaded*/
         return v;

@@ -1,7 +1,7 @@
 <resources>
     <string name="action_settings">Settings</string>
     <string name="app_name">SharkTracker</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-6091505442457709/4923967670</string>
     <string name="profile">Profile</string>
     <string name="title_activity_main">MainActivity</string>
 

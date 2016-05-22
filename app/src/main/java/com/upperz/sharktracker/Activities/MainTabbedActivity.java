@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.upperz.sharktracker.Fragments.ListFragment;
 import com.upperz.sharktracker.Fragments.MapFragment;
 import com.upperz.sharktracker.Fragments.SponsorFragment;
@@ -29,6 +31,8 @@ public class MainTabbedActivity extends AppCompatActivity {
     public ListFragment lf;
     public SponsorFragment sf;
 
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class MainTabbedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_tabbed);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        loadAd();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,6 +70,9 @@ public class MainTabbedActivity extends AppCompatActivity {
                         lf.trackName = null;
                     }
                 }
+
+                if(mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
             }
 
             @Override
@@ -197,6 +205,19 @@ public class MainTabbedActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void loadAd()
+    {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6091505442457709/4923967670");
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+
 
 
 }
