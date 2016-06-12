@@ -46,6 +46,8 @@ dependencies {
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'me.drakeet.materialdialog:library:1.2.2'
 
+    compile 'com.github.devlight.navigationtabbar:library:1.2.0'
+
 
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

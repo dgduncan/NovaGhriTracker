@@ -143,7 +143,7 @@ public class SplashActivity extends AppCompatActivity
                 progressDialog.dismiss();
 
                 /*Start the activity to go to the tabbed activity*/
-                Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+                Intent intent = new Intent(SplashActivity.this, NavigationTabBar.class);
                 startActivity(intent);
 
                 /*finish() prevents the user from being able to back press back into the splash*/

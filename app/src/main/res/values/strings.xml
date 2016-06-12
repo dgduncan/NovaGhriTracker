@@ -59,5 +59,6 @@
         "changes as this is a side project. I have lots of exciting things planned for this application"
         " but it will take some time so please bear with me. Again, I hope everyone enjoys!"</string>
     <string name="track">Track</string>
+    <string name="title_activity_navigation_tab_bar">NavigationTabBar</string>
 
 </resources>

@@ -21,7 +21,7 @@
         <activity
             android:name=".Activities.MainTabbedActivity"
             android:label="@string/title_activity_main_tabbed"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -35,8 +35,14 @@
             android:name=".Activities.SharkActivity"
             android:label="@string/title_activity_shark"
             android:parentActivityName=".Activities.MainTabbedActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".BottomBar.BottomBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BottomBar.BottomBar" />
+        <activity
+            android:name=".Activities.NavigationTabBar"
+            android:label="@string/title_activity_navigation_tab_bar"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>
