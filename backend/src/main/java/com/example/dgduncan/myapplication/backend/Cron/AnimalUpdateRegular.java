@@ -217,10 +217,21 @@ public class AnimalUpdateRegular extends HttpServlet
             tagging_video = beginning[taggingVideoIndex];
         }
 
-
-
-
-
+        float initialLatitude, initalLongitude, currentLatitude, currentLongitude;
+        try
+        {
+            initialLatitude = Float.valueOf(first[latitudeIndex]);
+            initalLongitude = Float.valueOf(first[longitudeIndex]);
+            currentLatitude = Float.valueOf(x[latitudeIndex]);
+            currentLongitude = Float.valueOf(x[longitudeIndex]);
+        }
+        catch (NumberFormatException e)
+        {
+            initialLatitude = 20;
+            initalLongitude = 20;
+            currentLatitude = 20;
+            currentLongitude = 20;
+        }
 
         Animal animal = new Animal(
                 beginning[commonNameIndex],

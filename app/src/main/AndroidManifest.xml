@@ -36,13 +36,6 @@
             android:label="@string/title_activity_shark"
             android:parentActivityName=".Activities.MainTabbedActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BottomBar.BottomBar" />
-        <activity
-            android:name=".Activities.NavigationTabBar"
-            android:label="@string/title_activity_navigation_tab_bar"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
     </application>
 
 </manifest>

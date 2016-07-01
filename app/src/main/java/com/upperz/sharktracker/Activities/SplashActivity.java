@@ -1,55 +1,113 @@
 package com.upperz.sharktracker.Activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.dgduncan.myapplication.backend.myApi.MyApi;
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
-import com.example.dgduncan.myapplication.backend.myApi.model.AnimalCollection;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SplashActivity extends AppCompatActivity
 {
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        queryAllAnimals();
+
+
+
+
         /*Query GAE to get latest locations*/
-        new EndpointsAsyncTask().execute();
+        //new EndpointsAsyncTask().execute();
+    }
+
+    private void queryAllAnimals()
+    {
+
+        progressDialog = new ProgressDialog(SplashActivity.this);
+        progressDialog.setMessage("Loading animal locations ... ");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get("http://104.197.207.240:8080/api/getAll", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // If the response is JSONObject instead of expected JSONArray
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+
+
+                for (int index = 0; index < timeline.length(); index++)
+                {
+
+                    try
+                    {
+                        //Log.d("MAIN", String.valueOf(timeline.getJSONObject(index).getJSONObject("shark").getBoolean("recent")));
+                        Animal animal = new Animal(timeline.getJSONObject(index));
+                        MyApplication.animals.put(animal.name, animal);
+                        MyApplication.sharks.add(animal);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+                progressDialog.dismiss();
+
+                /*Start the activity to go to the tabbed activity*/
+                Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
+                startActivity(intent);
+
+                /*finish() prevents the user from being able to back press back into the splash*/
+                finish();
+
+            }
+        });
+
     }
 
     /**
      * Async task that creates a reference to my AnimalApi, queries for the latest locations, and
      * stores this data as a global variable
      */
-    class EndpointsAsyncTask extends AsyncTask<Void, Void, AnimalCollection>
+
+    /*class EndpointsAsyncTask extends AsyncTask<Void, Void, AnimalCollection>
     {
 
-        /*Reference to AsyncTask used to stop task if timer goes over time*/
+        *//*Reference to AsyncTask used to stop task if timer goes over time*//*
         private EndpointsAsyncTask endpointsAsyncTask = this;
 
-        /*Reference to my Backend API*/
+        *//*Reference to my Backend API*//*
         private MyApi myApiService = null;
 
-        /*Dialog to notify user about what is going on*/
+        *//*Dialog to notify user about what is going on*//*
         private ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute()
         {
 
-            /*Create progress dialog to notify user that application is loading*/
+            *//*Create progress dialog to notify user that application is loading*//*
             progressDialog = new ProgressDialog(SplashActivity.this);
             progressDialog.setMessage("Loading animal locations ... ");
             progressDialog.setIndeterminate(true);
@@ -57,7 +115,7 @@ public class SplashActivity extends AppCompatActivity
             progressDialog.show();
 
 
-            /*CountDownTimer to prevent the request from running for ever*/
+            *//*CountDownTimer to prevent the request from running for ever*//*
             new CountDownTimer(15000, 15000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -68,7 +126,7 @@ public class SplashActivity extends AppCompatActivity
                 @Override
                 public void onFinish()
                 {
-                    /*Check if AsyncTask is actually still running*/
+                    *//*Check if AsyncTask is actually still running*//*
                     if(endpointsAsyncTask.getStatus() == Status.RUNNING)
                     {
                         //Cancel task if still running
@@ -101,7 +159,7 @@ public class SplashActivity extends AppCompatActivity
         @Override
         protected AnimalCollection doInBackground(Void ... params)
         {
-            /*Build API service*/
+            *//*Build API service*//*
             if(myApiService == null)
             {
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -110,7 +168,7 @@ public class SplashActivity extends AppCompatActivity
                 myApiService = builder.build();
             }
 
-            /*Attempt to get animals from API*/
+            *//*Attempt to get animals from API*//*
             try
             {
                 return myApiService.getAllAnimals().execute();
@@ -127,32 +185,32 @@ public class SplashActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(AnimalCollection result)
         {
-            /*Check if result is null to catch any network error*/
+            *//*Check if result is null to catch any network error*//*
             if(result != null)
             {
                 //TODO : I don't like the way that this is done
                 MyApplication.sharks = result.getItems();
 
-                /*Put animal references into the MyApplication*/
+                *//*Put animal references into the MyApplication*//*
                 for(Animal animal : result.getItems())
                 {
                     MyApplication.animals.put(animal.getName(), animal);
                 }
 
-                /*Dismiss the dialog to tell user that everything is done*/
+                *//*Dismiss the dialog to tell user that everything is done*//*
                 progressDialog.dismiss();
 
-                /*Start the activity to go to the tabbed activity*/
-                Intent intent = new Intent(SplashActivity.this, NavigationTabBar.class);
+                *//*Start the activity to go to the tabbed activity*//*
+                Intent intent = new Intent(SplashActivity.this, MainTabbedActivity.class);
                 startActivity(intent);
 
-                /*finish() prevents the user from being able to back press back into the splash*/
+                *//*finish() prevents the user from being able to back press back into the splash*//*
                 finish();
             }
 
             else
             {
-                /*Build an Alert Dialog to tell user that a network has occured*/
+                *//*Build an Alert Dialog to tell user that a network has occured*//*
                 new AlertDialog.Builder(SplashActivity.this)
                         .setTitle("Connection Error")
                         .setMessage("There seems to be an issue connecting to our backend," +
@@ -166,5 +224,5 @@ public class SplashActivity extends AppCompatActivity
                         .show();
             }
         }
-    }
+    }*/
 }

@@ -3,7 +3,6 @@ package com.upperz.sharktracker.Classes;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -55,18 +54,18 @@ public class MapHelper
         if(!initialLocation)
         {
             /*recent check to choose the correct marker type. I.e green measle or blue measle*/
-            if(animal.getRecent())
+            if(animal.recent)
             {
                 markerList.add(googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(animal.getCurrentLocation().getLatitude(), animal.getCurrentLocation().getLongitude()))
-                        .title(animal.getName())
+                        .position(new LatLng(animal.latitude_current, animal.longitude_current))
+                        .title(animal.name)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_measle))));
             }
             else
             {
                 markerList.add(googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(animal.getCurrentLocation().getLatitude(), animal.getCurrentLocation().getLongitude()))
-                        .title(animal.getName())
+                        .position(new LatLng(animal.latitude_current, animal.longitude_current))
+                        .title(animal.name)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_measle))));
             }
         }
@@ -74,8 +73,8 @@ public class MapHelper
         else
         {
             MarkerOptions markerOptions = new MarkerOptions()
-                    .position(new LatLng(Double.valueOf(animal.getInitialLocation().getLatitude()), Double.valueOf(animal.getInitialLocation().getLongitude())))
-                    .title(animal.getName())
+                    .position(new LatLng(animal.latitude_initial, animal.longitude_initial))
+                    .title(animal.name)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.star_marker));
             temporaryStartMarker = googleMap.addMarker(markerOptions);
         }

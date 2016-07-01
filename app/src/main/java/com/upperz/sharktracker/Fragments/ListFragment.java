@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.upperz.sharktracker.Activities.SharkActivity;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 import com.upperz.sharktracker.RecyclerItemClickListener;
@@ -120,8 +120,8 @@ public class ListFragment extends Fragment
         @Override
         public int compare(Animal o1, Animal o2)
         {
-            DateTime dt1 = formatter.parseDateTime(o1.getDate());
-            DateTime dt2 = formatter.parseDateTime(o2.getDate());
+            DateTime dt1 = formatter.parseDateTime(o1.date);
+            DateTime dt2 = formatter.parseDateTime(o2.date);
 
             int recentTest1 = (Days.daysBetween(dt1, new LocalDateTime().toDateTime()).getDays());
             int recentTest2 = (Days.daysBetween(dt2, new LocalDateTime().toDateTime()).getDays());

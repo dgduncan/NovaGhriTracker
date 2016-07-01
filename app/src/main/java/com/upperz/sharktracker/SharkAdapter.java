@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.upperz.sharktracker.Classes.Animal;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -74,21 +74,21 @@ public class SharkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Animal item = items.get(position);
 
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
-        DateTime dt = formatter.parseDateTime(item.getDate());
+        DateTime dt = formatter.parseDateTime(item.date);
 
         int recenttest = (Days.daysBetween(dt, new LocalDateTime().toDateTime()).getDays());
 
         WorkoutViewHolder vh = (WorkoutViewHolder) holder;
 
         vh.timeSinceUpdatedView.setText(String.valueOf(recenttest) + " Days Ago");
-        vh.sharkView.setText(item.getName());
+        vh.sharkView.setText(item.name);
         loadApproptiateImage(vh, item);
         vh.data = item;
     }
 
     public void loadApproptiateImage(WorkoutViewHolder x, Animal item)
     {
-        switch(item.getCommonName())
+        switch(item.common_name)
         {
             case "Blue Marlin":
                 x.mProfilePic.setImageResource(R.drawable.whitemarlin_1);

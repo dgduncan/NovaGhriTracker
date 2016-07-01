@@ -4,38 +4,38 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cocosw.bottomsheet.BottomSheet;
-import com.example.dgduncan.myapplication.backend.models.trackApi.TrackApi;
-import com.example.dgduncan.myapplication.backend.models.trackApi.model.Track;
-import com.example.dgduncan.myapplication.backend.models.trackApi.model.TrackCollection;
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.upperz.sharktracker.Activities.SharkActivity;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.Classes.MapHelper;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener, GoogleMap.InfoWindowAdapter, GoogleMap.OnMapLoadedCallback {
 
@@ -76,7 +76,46 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void createSharkTrack(final String name)
     {
 
-        new EndpointsAsyncTask().execute(name);
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("name", name);
+
+        client.get("http://104.197.207.240:8080/api/getSpecificTrack", requestParams, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // If the response is JSONObject instead of expected JSONArray
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+
+                ArrayList<LatLng> latLngArrayList = new ArrayList<>();
+
+                try
+                {
+                    String name = timeline.getJSONObject(1).getString("name");
+
+                    for (int index = 0; index < timeline.length(); index++)
+                    {
+                        latLngArrayList.add(new LatLng(timeline.getJSONObject(index).getDouble("latitude"), timeline.getJSONObject(index).getDouble("longitude")));
+                    }
+
+                    mapHelper.createSharkTrack(name, latLngArrayList);
+
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+
+            }
+        });
 
 
     }
@@ -100,17 +139,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         for (Animal animal : MyApplication.sharks) {
 
-            if (animal.getName().equals(marker.getTitle()))
+            if (animal.name.equals(marker.getTitle()))
             {
-                commonView.setText(animal.getCommonName());
-                nameView.setText(animal.getName());
-                latitudeView.setText(animal.getDate());
-                longitudeView.setText(animal.getSpecies());
+                commonView.setText(animal.common_name);
+                nameView.setText(animal.name);
+                latitudeView.setText(animal.date);
+                longitudeView.setText(animal.species);
 
-                if(Arrays.asList(getResources().getStringArray(R.array.sponsor_sharks)).contains(animal.getName()))
+                if(Arrays.asList(getResources().getStringArray(R.array.sponsor_sharks)).contains(animal.name))
                 {
                     v.findViewById(R.id.sponsor_layout).setVisibility(View.VISIBLE);
-                    sponsorView.setText(MyApplication.sharkSponsors.get(animal.getName()));
+                    sponsorView.setText(MyApplication.sharkSponsors.get(animal.name));
                 }
             }
         }
@@ -136,7 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                 break;
 
                             case R.id.track:
-                                new EndpointsAsyncTask().execute(marker.getTitle());
+                                createSharkTrack(marker.getTitle());
                                 break;
 
 
@@ -184,6 +223,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         mapHelper = new MapHelper();
         mapHelper.initialize(googleMap);
+
 
 
     }
@@ -251,18 +291,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     /***
      * Async task that creates a reference to my AnimalApi, queries for the latest locations, and
      * stores this data as a global variable
-     */
+     *//*
     class EndpointsAsyncTask extends AsyncTask<String, Void, TrackCollection>
     {
         private String name;
 
-        /*Reference to AsyncTask used to stop task if timer goes over time*/
+        *//*Reference to AsyncTask used to stop task if timer goes over time*//*
         private EndpointsAsyncTask endpointsAsyncTask = this;
 
-        /*Reference to my Backend API*/
+        *//*Reference to my Backend API*//*
         private TrackApi myApiService = null;
 
-        /*Dialog to notify user about what is going on*/
+        *//*Dialog to notify user about what is going on*//*
         private ProgressDialog progressDialog;
 
         @Override
@@ -285,7 +325,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 @Override
                 public void onFinish()
                 {
-                    /*Check if AsyncTask is actually still runnning*/
+                    *//*Check if AsyncTask is actually still runnning*//*
                     if(endpointsAsyncTask.getStatus() == Status.RUNNING)
                     {
                         //Cancel task if still running
@@ -318,7 +358,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         @Override
         protected TrackCollection doInBackground(String... params)
         {
-            /*Build API service*/
+            *//*Build API service*//*
             if(myApiService == null)
             {
                 TrackApi.Builder builder = new TrackApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -330,7 +370,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             name = params[0];
 
 
-            /*Attempt to get animals from API*/
+            *//*Attempt to get animals from API*//*
             try
             {
                 return myApiService.getTrack(params[0]).execute();
@@ -347,21 +387,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         @Override
         protected void onPostExecute(TrackCollection result)
         {
-            /*Create an Array List of Latitudes and Longitudes*/
+            *//*Create an Array List of Latitudes and Longitudes*//*
             ArrayList<LatLng> mLatLngs = new ArrayList<>();
 
-            /*Create add all the latitudes and longitudes*/
+            *//*Create add all the latitudes and longitudes*//*
             for (Track track : result.getItems())
                 mLatLngs.add(new LatLng(track.getLocation().getLatitude(), track.getLocation().getLongitude()));
 
-            /*Create the shark track using the mapHelper*/
+            *//*Create the shark track using the mapHelper*//*
             mapHelper.createSharkTrack(name, mLatLngs);
 
-            /*Dismiss dialog*/
+            *//*Dismiss dialog*//*
             progressDialog.dismiss();
 
 
 
         }
-    }
+    }*/
 }

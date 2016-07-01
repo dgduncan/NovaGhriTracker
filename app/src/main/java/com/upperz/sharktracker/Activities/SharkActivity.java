@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dgduncan.myapplication.backend.myApi.model.Animal;
+import com.upperz.sharktracker.Classes.Animal;
 import com.upperz.sharktracker.Fragments.YoutubeFragment;
 import com.upperz.sharktracker.MyApplication;
 import com.upperz.sharktracker.R;
@@ -54,7 +54,7 @@ public class SharkActivity extends AppCompatActivity {
 
 
 
-        if(!MyApplication.animals.get(getIntent().getStringExtra("name")).getTaggingVideo().equals("unknown"))
+        if(!MyApplication.animals.get(getIntent().getStringExtra("name")).tagging_video.equals("unknown"))
         {
             YoutubeFragment f = YoutubeFragment.newInstance("UlYM1pOSfos");
             getSupportFragmentManager().beginTransaction().replace(R.id.youtubeContainer, f).commit();
@@ -96,28 +96,28 @@ public class SharkActivity extends AppCompatActivity {
         TextView species = (TextView)findViewById(R.id.species);
 
         if (commonName != null) {
-            commonName.setText(animal.getCommonName());
+            commonName.setText(animal.common_name);
         }
         if (name != null) {
-            name.setText(animal.getName());
+            name.setText(animal.name);
         }
         if (date != null) {
-            date.setText(animal.getDate());
+            date.setText(animal.date);
         }
         if (days != null) {
-            days.setText(String.valueOf(animal.getDaysTracked()));
+            days.setText(String.valueOf(animal.days_tracked));
         }
         if (sex != null) {
-            sex.setText(animal.getSex());
+            sex.setText(animal.sex);
         }
         if (species != null) {
-            species.setText(animal.getSpecies());
+            species.setText(animal.species);
         }
         if (latitude != null) {
-            latitude.setText(String.valueOf(animal.getCurrentLocation().getLatitude()));
+            latitude.setText(String.valueOf(animal.latitude_current));
         }
         if (longitude != null) {
-            longitude.setText(String.valueOf(animal.getCurrentLocation().getLongitude()));
+            longitude.setText(String.valueOf(animal.longitude_current));
         }
 
 
@@ -140,7 +140,7 @@ public class SharkActivity extends AppCompatActivity {
     public void updatePicture()
     {
         ImageView animalImage = (ImageView)findViewById(R.id.toolbarImage);
-        switch(MyApplication.animals.get(getIntent().getStringExtra("name")).getCommonName())
+        switch(MyApplication.animals.get(getIntent().getStringExtra("name")).common_name)
         {
             case "Blue Marlin":
                 animalImage.setImageResource(R.drawable.whitemarlin_1);
