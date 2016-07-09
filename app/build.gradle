@@ -9,8 +9,8 @@ android {
         applicationId "com.upperz.sharktracker"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 38
-        versionName "1.36"
+        versionCode 40
+        versionName "1.41"
     }
     buildTypes {
         release {

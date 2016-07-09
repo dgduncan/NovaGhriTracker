@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,19 +78,54 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void createSharkTrack(final String name)
     {
 
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading Track Information ... ");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         AsyncHttpClient client = new AsyncHttpClient();
 
         RequestParams requestParams = new RequestParams();
         requestParams.add("name", name);
 
         client.get("http://104.197.207.240:8080/api/getSpecificTrack", requestParams, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject jsonObject)
+            {
+
+                progressDialog.dismiss();
+
+
+                Log.e("SplashActivity", String.valueOf(statusCode));
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Connection Error")
+                        .setMessage("There seems to be an issue connecting to our backend," +
+                                " we apologize for the issue and please try again later.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // If the response is JSONObject instead of expected JSONArray
+
+                progressDialog.dismiss();
+
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+
+                progressDialog.dismiss();
 
                 ArrayList<LatLng> latLngArrayList = new ArrayList<>();
 

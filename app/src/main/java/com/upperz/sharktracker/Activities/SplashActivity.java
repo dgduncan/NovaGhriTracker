@@ -1,9 +1,13 @@
 package com.upperz.sharktracker.Activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -24,6 +28,7 @@ public class SplashActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         queryAllAnimals();
 
@@ -46,6 +51,25 @@ public class SplashActivity extends AppCompatActivity
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get("http://104.197.207.240:8080/api/getAll", null, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject jsonObject)
+            {
+                Log.e("SplashActivity", String.valueOf(statusCode));
+
+                new AlertDialog.Builder(SplashActivity.this)
+                        .setTitle("Connection Error")
+                        .setMessage("There seems to be an issue connecting to our backend," +
+                                " we apologize for the issue and please try again later.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // If the response is JSONObject instead of expected JSONArray
@@ -81,6 +105,11 @@ public class SplashActivity extends AppCompatActivity
                 /*finish() prevents the user from being able to back press back into the splash*/
                 finish();
 
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                Log.d("SplashActivity", "Retry attempt # " + String.valueOf(retryNo));
             }
         });
 
